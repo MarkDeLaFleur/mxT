@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ScoreFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scoring points for double "
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/theTable"
+            app:layout_constraintTop_toBottomOf="@id/horizontalScrollView" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="334dp"
+            android:layout_height="94dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.26"
+            tools:ignore="ExtraText,SpeakableTextPresentCheck">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imageButton12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_doubletwelve"
+                    android:tag="button12" />
+
+                <ImageButton
+                    android:id="@+id/imageButton11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button11"
+                    android:src="@drawable/ic_doubleeleven" />
+
+                <ImageButton
+                    android:id="@+id/imageButton10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button10"
+                    android:src="@drawable/ic_doubleten" />
+
+                <ImageButton
+                    android:id="@+id/imageButton09"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button9"
+                    android:src="@drawable/ic_doublenine" />
+
+                <ImageButton
+                    android:id="@+id/imageButton08"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button8"
+                    android:src="@drawable/ic_doubleeight" />
+
+                <ImageButton
+                    android:id="@+id/imageButton07"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button7"
+                    android:src="@drawable/ic_doubleseven" />
+
+                <ImageButton
+                    android:id="@+id/imageButton06"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button6"
+                    android:src="@drawable/ic_doublesix" />
+
+                <ImageButton
+                    android:id="@+id/imageButton05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button5"
+                    android:src="@drawable/ic_doublefive" />
+
+                <ImageButton
+                    android:id="@+id/imageButton04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button4"
+                    android:src="@drawable/ic_doublefour" />
+
+                <ImageButton
+                    android:id="@+id/imageButton03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button3"
+                    android:src="@drawable/ic_doublethree" />
+
+                <ImageButton
+                    android:id="@+id/imageButton02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button2"
+                    android:src="@drawable/ic_doubletwo" />
+
+                <ImageButton
+                    android:id="@+id/imageButton01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button1"
+                    android:src="@drawable/ic_doubleone" />
+
+                <ImageButton
+                    android:id="@+id/imageButton00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="button0"
+                    android:src="@drawable/ic_doubleblank" />
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TableLayout
+            android:id="@+id/theTable"
+            android:layout_width="244dp"
+            android:layout_height="471dp"
+            app:layout_constraintBottom_toTopOf="@+id/summaryPage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+            <TableRow
+                android:id="@+id/TR1"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/player1textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:longClickable="true"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player1editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player1imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR2"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/player2textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player2editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player2imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR3"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/player3textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player3editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player3imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR4"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/player4textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player4editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player4imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR5"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player5textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player5editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player5imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR6"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player6textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player6editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player6imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR7"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player7textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player7editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player7imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR8"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player8textView"
+                    android:layout_width="104dp"
+                    android:layout_height="39dp"
+                    android:gravity="bottom"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/player8editTextNumber"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:ems="10"
+                    android:hint="9999"
+                    android:inputType="number"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/player8imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera" />
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            android:id="@+id/summaryPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go to Score Summary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
