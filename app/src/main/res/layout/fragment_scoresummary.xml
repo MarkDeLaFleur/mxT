@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ScoresummaryFragment">
+<data>
+    <variable
+        name="scoresummaryFragment"
+        type="com.delafleur.mxt.ui.ScoresummaryFragment" />
+</data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="@string/select_number_of_players"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.063"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="389dp"
+            android:layout_height="37dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.05">
+
+            <RadioButton
+                android:id="@+id/button1"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(1)}"
+                android:text="2" />
+
+            <RadioButton
+                android:id="@+id/button2"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(2)}"
+                android:text="3" />
+
+            <RadioButton
+                android:id="@+id/button3"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(3)}"
+                android:text="4" />
+
+            <RadioButton
+                android:id="@+id/button4"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(4)}"
+                android:text="5" />
+
+            <RadioButton
+                android:id="@+id/button5"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(5)}"
+                android:text="6" />
+
+            <RadioButton
+                android:id="@+id/button6"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(6)}"
+                android:text="7" />
+
+            <RadioButton
+                android:id="@+id/button7"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(7)}"
+                android:text="8" />
+        </RadioGroup>
+
+
+        <TextView
+            android:id="@+id/roundsScored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Rounds Scored"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/roundsNotScored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Rounds Not Scored"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundsScored"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="349dp"
+            android:layout_height="449dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:id="@+id/TR0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:id="@+id/TR0C1"
+                    android:layout_width="93dp"
+                    android:layout_height="match_parent"
+                    android:text="Player"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/TR0C2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Total"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/TR0C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:text="Scores"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/TR1C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR1C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X1" />
+
+                <TextView
+                    android:id="@+id/TR1C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/TR2C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR2C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X2" />
+
+                <TextView
+                    android:id="@+id/TR2C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR3"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/TR3C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR3C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X3" />
+
+                <TextView
+                    android:id="@+id/TR3C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/TR4C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR4C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X4" />
+
+                <TextView
+                    android:id="@+id/TR4C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="4dp">
+
+                <EditText
+                    android:id="@+id/TR5C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR5C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X5" />
+
+                <TextView
+                    android:id="@+id/TR5C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="4dp">
+
+                <EditText
+                    android:id="@+id/TR6C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR6C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X6" />
+
+                <TextView
+                    android:id="@+id/TR6C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="4dp">
+
+                <EditText
+                    android:id="@+id/TR7C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR7C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X7" />
+
+                <TextView
+                    android:id="@+id/TR7C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/xxx" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TR8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="4dp">
+
+                <EditText
+                    android:id="@+id/TR8C1"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/TR8C2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_999" />
+
+                <TextView
+                    android:id="@+id/TR8C3"
+                    android:layout_width="224dp"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:text="X8" />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/Return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> scoresummaryFragment.onReturnSelected()}"
+            android:text="Enter&#10;Scores"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintVertical_bias="0.439" />
+
+        <Button
+            android:id="@+id/newGame"
+            android:layout_width="96dp"
+            android:layout_height="55dp"
+            android:onClick="@{() -> scoresummaryFragment.onNewGameSelected()}"
+            android:text="New&#10;Game"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.733"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tableLayout"
+            app:layout_constraintVertical_bias="0.435" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

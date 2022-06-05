@@ -3,45 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/scoresummaryFragment">
 
-    <fragment
-        android:id="@+id/startFragment"
-        android:name="com.delafleur.mxt.ui.StartFragment"
-        android:label="fragment_start"
-        tools:layout="@layout/fragment_start" >
-        <action
-            android:id="@+id/action_startFragment_to_scoreFragment"
-            app:destination="@id/scoreFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/scoreFragment"
-        android:name="com.delafleur.mxt.ui.ScoreFragment"
-        android:label="fragment_score"
-        tools:layout="@layout/fragment_score" >
-        <action
-            android:id="@+id/action_scoreFragment_to_summaryPageFragment"
-            app:destination="@id/summaryPageFragment" />
-        <action
-            android:id="@+id/action_scoreFragment_to_cameracaptureFragment"
-            app:destination="@id/cameracaptureFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/summaryPageFragment"
-        android:name="com.delafleur.mxt.ui.SummaryPageFragment"
-        android:label="fragment_summary_page"
-        tools:layout="@layout/fragment_summary_page" >
-        <action
-            android:id="@+id/action_summaryPageFragment_to_scoreFragment"
-            app:destination="@id/scoreFragment" />
-    </fragment>
     <fragment
         android:id="@+id/cameracaptureFragment"
         android:name="com.delafleur.mxt.ui.CameracaptureFragment"
-        android:label="CameracaptureFragment" >
+        android:label="CameracaptureFragment">
         <action
-            android:id="@+id/action_cameracaptureFragment_to_scoreFragment"
-            app:destination="@id/scoreFragment" />
+            android:id="@+id/action_cameracaptureFragment_to_playersFragment"
+            app:destination="@id/playersFragment" />
+        <action
+            android:id="@+id/action_cameracaptureFragment_to_cameraShowImageFragment"
+            app:destination="@id/cameraShowImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playersFragment"
+        android:name="com.delafleur.mxt.ui.PlayersFragment"
+        android:label="PlayersFragment" >
+        <action
+            android:id="@+id/action_playersFragment_to_scoresummaryFragment"
+            app:destination="@id/scoresummaryFragment" />
+        <action
+            android:id="@+id/action_playersFragment_to_cameracaptureFragment"
+            app:destination="@id/cameracaptureFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scoresummaryFragment"
+        android:name="com.delafleur.mxt.ui.ScoresummaryFragment"
+        android:label="fragment_scoresummary"
+        tools:layout="@layout/fragment_scoresummary" >
+        <action
+            android:id="@+id/action_scoresummaryFragment_to_playersFragment"
+            app:destination="@id/playersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraShowImageFragment"
+        android:name="com.delafleur.mxt.ui.CameraShowImageFragment"
+        android:label="fragment_camera_show_image"
+        tools:layout="@layout/fragment_camera_show_image" >
+        <action
+            android:id="@+id/action_cameraShowImageFragment_to_playersFragment"
+            app:destination="@id/playersFragment" />
+        <argument
+            android:name="player"
+            app:argType="string" />
     </fragment>
 </navigation>
