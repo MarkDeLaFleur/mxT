@@ -8,36 +8,45 @@
         <variable
             name="playersFragment"
             type="com.delafleur.mxt.ui.PlayersFragment" />
+        <variable
+            name="sharedVM"
+            type="com.delafleur.mxt.data.SharedViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
         <TextView
             android:id="@+id/scoreRound"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeTextType="uniform"
             android:text="@string/scoring_for_round_xx"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
             android:textStyle="bold|italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.17000002" />
 
         <Button
             android:id="@+id/scoreSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
-            android:text="Summary "
             android:onClick="@{() -> playersFragment.onScoreSummaryButtonClicked()}"
+            android:text="Summary "
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintHorizontal_bias="0.41"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
 
@@ -51,7 +60,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.120000005"
+            app:layout_constraintVertical_bias="0.0"
             tools:ignore="SpeakableTextPresentCheck">
 
             <LinearLayout
@@ -170,33 +179,38 @@
             android:layout_height="419dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:textAlignment="gravity"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.79">
+            app:layout_constraintVertical_bias="0.64">
 
             <TableRow
                 android:id="@+id/TR1"
-                android:gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:textAlignment="gravity">
 
 
                 <TextView
                     android:id="@+id/TextPersonName1"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
-                    android:text="" />
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/editTextNumber1"
                     android:layout_width="109dp"
                     android:layout_height="match_parent"
-                    android:gravity="bottom"
                     android:ems="10"
+                    android:gravity="bottom"
                     android:inputType="number"
                     tools:ignore="SpeakableTextPresentCheck" />
 
@@ -212,13 +226,14 @@
             <TableRow
                 android:id="@+id/TR2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName2"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -234,21 +249,22 @@
                     android:id="@+id/imageButtontr2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> playersFragment.onCameraButtonClicked(1)}"
                     android:contentDescription="@string/app_name"
+                    android:onClick="@{() -> playersFragment.onCameraButtonClicked(1)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName3"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -264,21 +280,22 @@
                     android:id="@+id/imageButtontr3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> playersFragment.onCameraButtonClicked(2)}"
                     android:contentDescription="@string/app_name"
+                    android:onClick="@{() -> playersFragment.onCameraButtonClicked(2)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR4"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName4"
                     android:layout_width="151dp"
-                    android:autoSizeTextType="uniform"
                     android:layout_height="match_parent"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -302,13 +319,14 @@
             <TableRow
                 android:id="@+id/TR5"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName5"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -332,13 +350,14 @@
             <TableRow
                 android:id="@+id/TR6"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName6"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -362,13 +381,14 @@
             <TableRow
                 android:id="@+id/TR7"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName7"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
                     android:text="" />
 
@@ -384,23 +404,25 @@
                     android:id="@+id/imageButtontr7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_camera"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(6)}"
+                    android:src="@android:drawable/ic_menu_camera"
                     tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR8"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textAlignment="gravity">
 
                 <TextView
                     android:id="@+id/TextPersonName8"
                     android:layout_width="151dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="uniform"
+                    android:autoSizeTextType="none"
                     android:gravity="bottom"
-                    android:text="" />
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <EditText
                     android:id="@+id/editTextNumber8"

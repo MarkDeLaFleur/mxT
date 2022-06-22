@@ -1,15 +1,16 @@
 package com.delafleur.mxt.ui
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Editable
+import android.text.BoringLayout
 import android.util.Log
-
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
@@ -17,18 +18,18 @@ import com.delafleur.mxt.databinding.FragmentPlayersBinding
 import com.delafleur.mxt.util.readCSV
 import com.delafleur.mxt.util.writeCSV
 
-/*  Soon to replace the fragment start , score with this. Need to work out putting the date for
-*   Player scores in the livedata shared view model and update the domino file from there
-*   also need to hook up the camera image button using the function call from the camera xml
-*   and then once were good there, we'll get to the summary thing.
-*  */
-
 
 class PlayersFragment : Fragment() {
     private var _binding: FragmentPlayersBinding? = null
     private var listOfPlayers = mutableListOf<Array<String>>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val binding get() = _binding!!
+    private var plScoreInd = 0
+    private var checkCameraP :Boolean = false
+    private var cPts: String = ""
+    private var plyrInd: String = ""
+    private var pRnd: Int = 0
+
     //players record 0 is Player,R00x,R01x,R02x,R03X,R04X,R05X...
     //players record 0    0     ,1   ,2   ,3   ,4   ,5   ,6.....
     //button index   0 --12, 1 --11, 2 --10, 3 --09, 4 --08, 5 --07
@@ -44,10 +45,28 @@ class PlayersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.playersFragment = this
-        listOfPlayers = readCSV()
+        // listOfPlayers = readCSV()
+        binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+            sharedVM = sharedViewModel
+            playersFragment = this@PlayersFragment
+        }
+
+        val checkCameraPts = Observer<String> { pts ->  cPts = pts}
+        sharedViewModel.totalPoints .observe(viewLifecycleOwner,checkCameraPts)
+        val checkCameraPlayerindex = Observer<String> { pInd ->  plyrInd = pInd}
+        sharedViewModel.playerIndex .observe(viewLifecycleOwner,checkCameraPlayerindex)
+        val checkRoundScored = Observer<Int> { pRndo ->  pRnd = pRndo}
+        sharedViewModel.roundScored .observe(viewLifecycleOwner,checkRoundScored)
+
         checkPlayers()
 
     }
+    override fun onResume() {
+        super.onResume()
+    }
+
+
     fun checkPlayers(){
             // put in the players names, turn on visibility
         val pName = arrayOf(binding.TextPersonName1,binding.TextPersonName2,
@@ -87,11 +106,16 @@ class PlayersFragment : Fragment() {
             binding.editTextNumber6, binding.editTextNumber7, binding.editTextNumber8
         )
 
-        val plScoreInd = button2PlayerScore.getValue(roundScored) //eg.  domino 00 is score index 01
+        plScoreInd = button2PlayerScore.getValue(roundScored) //eg.  domino 00 is score index 01
         val newText = "Scoring for Round Double --> " + (roundScored).toString()
         binding.scoreRound.text = newText
         val hasScore = listOfPlayers[0][plScoreInd].contains("G")
         //check players and update
+        if (cPts.length > 0) {
+            scoresIn[plyrInd.toInt()].setText(cPts)
+            sharedViewModel.clearProcess()
+        }
+
         var totalPts = 0
 
         listOfPlayers.forEachIndexed { index, it ->
@@ -101,12 +125,13 @@ class PlayersFragment : Fragment() {
                 listOfPlayers[0][plScoreInd] = listOfPlayers[0][plScoreInd].substring(0,3)
                 totalPts = 0
                 scoresIn[index - 1].setText(it[plScoreInd])
-                writeCSV(listOfPlayers)
+               // writeCSV(listOfPlayers)
             }
             else {
                     if (index > 0 && scoresIn[index - 1].text.toString() != "") {
                         Log.i("round", "Round $roundScored is put into player field $plScoreInd")
                         it[plScoreInd] = scoresIn[index - 1].text.toString()
+                        Log.i("dd","cPts is ${cPts}")
                         totalPts += it[plScoreInd].toInt()
 
                     }
@@ -116,7 +141,7 @@ class PlayersFragment : Fragment() {
             if (totalPts > 0) {
                 dominoButton[roundScored].setBackgroundColor((android.graphics.Color.GREEN))
                 listOfPlayers[0][plScoreInd] = listOfPlayers[0][plScoreInd].substring(0, 3) + "G"
-                writeCSV(listOfPlayers)
+                //writeCSV(listOfPlayers)
                 scoresIn.forEach { it.setText("")
                 dominoButton[roundScored].requestFocus()
                 }
@@ -124,7 +149,7 @@ class PlayersFragment : Fragment() {
         else{
             dominoButton[roundScored].setBackgroundColor((android.graphics.Color.LTGRAY))
             listOfPlayers[0][plScoreInd] = listOfPlayers[0][plScoreInd].substring(0, 3)
-            writeCSV(listOfPlayers)
+            //writeCSV(listOfPlayers)
 
 
         }
@@ -134,9 +159,9 @@ class PlayersFragment : Fragment() {
         findNavController().navigate(R.id.action_playersFragment_to_scoresummaryFragment)
 
     }
-    fun onCameraButtonClicked(player: Int){
-        Log.i("player","player $player called the camera capture")
-        sharedViewModel.setPlayer(player.toString())
+    fun onCameraButtonClicked(playerIndex: Int){
+        Log.i("player","player $playerIndex called the camera capture")
+        sharedViewModel.setPlayer(playerIndex.toString())
         findNavController().navigate((R.id.action_playersFragment_to_cameracaptureFragment))
     }
  }

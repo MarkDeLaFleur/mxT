@@ -5,6 +5,9 @@
     tools:context=".ScoresummaryFragment">
 <data>
     <variable
+        name="sharedVM"
+        type="com.delafleur.mxt.data.SharedViewModel"/>
+    <variable
         name="scoresummaryFragment"
         type="com.delafleur.mxt.ui.ScoresummaryFragment" />
 </data>
@@ -12,87 +15,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="@string/select_number_of_players"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.063"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="389dp"
-            android:layout_height="37dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.05">
-
-            <RadioButton
-                android:id="@+id/button1"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(1)}"
-                android:text="2" />
-
-            <RadioButton
-                android:id="@+id/button2"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(2)}"
-                android:text="3" />
-
-            <RadioButton
-                android:id="@+id/button3"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(3)}"
-                android:text="4" />
-
-            <RadioButton
-                android:id="@+id/button4"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(4)}"
-                android:text="5" />
-
-            <RadioButton
-                android:id="@+id/button5"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(5)}"
-                android:text="6" />
-
-            <RadioButton
-                android:id="@+id/button6"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(6)}"
-                android:text="7" />
-
-            <RadioButton
-                android:id="@+id/button7"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="@{() -> scoresummaryFragment.onPlayersSelected(7)}"
-                android:text="8" />
-        </RadioGroup>
 
 
         <TextView
@@ -100,21 +22,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Rounds Scored"
+            android:layout_marginEnd="8dp"
+            android:text="@{sharedVM.roundsScored}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.02"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/roundsNotScored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Rounds Not Scored"
+            android:layout_marginEnd="8dp"
+            android:text="@{sharedVM.roundSNotScored}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +54,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.20">
 
             <TableRow
                 android:id="@+id/TR0"
@@ -143,6 +68,7 @@
                     android:layout_width="93dp"
                     android:layout_height="match_parent"
                     android:text="Player"
+                    android:textAlignment="center"
                     android:textStyle="bold" />
 
                 <TextView
@@ -157,6 +83,7 @@
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:text="Scores"
+                    android:textAlignment="center"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -171,20 +98,20 @@
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[0]}" />
 
                 <TextView
                     android:id="@+id/TR1C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X1" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[0]}" />
 
                 <TextView
                     android:id="@+id/TR1C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[0]}" />
             </TableRow>
 
             <TableRow
@@ -197,20 +124,20 @@
                     android:id="@+id/TR2C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[1]}" />
 
                 <TextView
                     android:id="@+id/TR2C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X2" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[1]}" />
 
                 <TextView
                     android:id="@+id/TR2C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[1]}" />
             </TableRow>
 
             <TableRow
@@ -224,19 +151,19 @@
                     android:id="@+id/TR3C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[2]}" />
 
                 <TextView
                     android:id="@+id/TR3C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X3" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[2]}" />
 
                 <TextView
                     android:id="@+id/TR3C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[2]}" />
             </TableRow>
 
             <TableRow
@@ -249,20 +176,20 @@
                     android:id="@+id/TR4C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[3]}" />
 
                 <TextView
                     android:id="@+id/TR4C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X4" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[3]}" />
 
                 <TextView
                     android:id="@+id/TR4C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[3]}" />
             </TableRow>
 
             <TableRow
@@ -275,20 +202,20 @@
                     android:id="@+id/TR5C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[4]}" />
 
                 <TextView
                     android:id="@+id/TR5C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X5" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[4]}" />
 
                 <TextView
                     android:id="@+id/TR5C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[4]}" />
             </TableRow>
 
             <TableRow
@@ -301,19 +228,19 @@
                     android:id="@+id/TR6C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[5]}" />
 
                 <TextView
                     android:id="@+id/TR6C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X6" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[5]}" />
 
                 <TextView
                     android:id="@+id/TR6C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[5]}" />
             </TableRow>
 
             <TableRow
@@ -326,19 +253,19 @@
                     android:id="@+id/TR7C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[6]}" />
 
                 <TextView
                     android:id="@+id/TR7C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X7" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[6]}" />
 
                 <TextView
                     android:id="@+id/TR7C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/xxx" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[6]}" />
             </TableRow>
 
             <TableRow
@@ -351,48 +278,48 @@
                     android:id="@+id/TR8C1"
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@{sharedVM.playerLiveDataName[7]}" />
 
                 <TextView
                     android:id="@+id/TR8C2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/_999" />
+                    android:text="@{sharedVM.playerLiveDataSumTot[7]}" />
 
                 <TextView
                     android:id="@+id/TR8C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
-                    android:text="X8" />
+                    android:text="@{sharedVM.playerLiveDataSumStr[7]}" />
             </TableRow>
         </TableLayout>
 
         <Button
             android:id="@+id/Return"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="96dp"
+            android:layout_height="55dp"
             android:onClick="@{() -> scoresummaryFragment.onReturnSelected()}"
-            android:text="Enter&#10;Scores"
+            android:text="@string/enter_10_scores"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-            app:layout_constraintVertical_bias="0.439" />
+            app:layout_constraintVertical_bias="0.70" />
 
         <Button
             android:id="@+id/newGame"
             android:layout_width="96dp"
             android:layout_height="55dp"
             android:onClick="@{() -> scoresummaryFragment.onNewGameSelected()}"
-            android:text="New&#10;Game"
+            android:text="@string/new_10_game"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.733"
+            app:layout_constraintHorizontal_bias="0.70"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tableLayout"
-            app:layout_constraintVertical_bias="0.435" />
+            app:layout_constraintVertical_bias="0.70" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

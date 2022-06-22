@@ -2,27 +2,20 @@ package com.delafleur.mxt
 
 import android.Manifest
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import android.util.Size
 import android.view.Surface
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.CameraController
-import androidx.camera.view.LifecycleCameraController
+import androidx.camera.camera2.Camera2Config
+import androidx.camera.core.*
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import com.delafleur.mxt.util.ProcessImageAnalyzer
-import com.google.common.util.concurrent.ListenableFuture
+import com.delafleur.mxt.CameraUtil.blobParamsInit
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.features2d.Features2d
@@ -30,85 +23,38 @@ import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
 import java.nio.ByteBuffer
-import java.util.concurrent.Executors
 
 
 private val REQUIRED_PERMISSIONS = arrayOf(
     "android.permission.CAMERA",
     "android.permission.WRITE_EXTERNAL_STORAGE"
 )
-
-
-
-
+private val blobparms = blobParamsInit()
+private val detector: SimpleBlobDetector = SimpleBlobDetector.create(blobparms)
 object CameraUtil {
-    fun startCameraC(x: Context,y: LifecycleOwner,preview: PreviewView){
-
-        val cameraController = LifecycleCameraController(x)
-        cameraController.bindToLifecycle(y)
-        cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
-        val preview = preview
-        preview.controller = cameraController
-
-
+    class CameraApplication: Application(),CameraXConfig.Provider {
+        override fun getCameraXConfig(): CameraXConfig {
+            return CameraXConfig.Builder.fromConfig(Camera2Config.defaultConfig())
+                .setMinimumLoggingLevel(Log.INFO).build()
+        }
     }
-
-    fun startCamera(
-        context: Context,
-        imageAnalyzer: ProcessImageAnalyzer,
-        provider: Preview.SurfaceProvider)
-     {
-         val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
-            ProcessCameraProvider.getInstance(context)
-        cameraProviderFuture.addListener(
-            {
-                try {
-                    val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-                    val preview = Preview.Builder()
-                        .build()
-                    val imageAnalysis = ImageAnalysis.Builder()
-                      //  .setImageQueueDepth(60)
-                        .setTargetResolution(Size(960,1280))
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                    imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), imageAnalyzer)
-                    val cameraSelector =
-                        CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                            .build()
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        (context as LifecycleOwner),
-                        cameraSelector,
-                        preview ,
-                        imageAnalysis
-                    )
-                    preview.setSurfaceProvider(provider)
-                } catch (e: Exception) {
-                    Log.e("error", "[startCamera] Use case binding failed", e)
-                }
-
-            },
-            ContextCompat.getMainExecutor(context)
-        )
-    }
-
-    fun getMatFromImage(image: ImageProxy): Mat {
-        val yBuffer: ByteBuffer = image.planes[0].buffer
-        val uBuffer: ByteBuffer = image.planes[1].buffer
-        val vBuffer: ByteBuffer = image.planes[2].buffer
-        val ySize: Int = yBuffer.remaining()
-        val uSize: Int = uBuffer.remaining()
-        val vSize: Int = vBuffer.remaining()
-        val nv21 = ByteArray(ySize + uSize + vSize)
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-        val yuv = Mat(image.height + image.height / 2, image.width, CvType.CV_8UC1)
-        yuv.put(0, 0, nv21)
-        val mat = Mat()
-        Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2RGB_NV21, 3)
-        return mat
-    }
+    //fun getMatFromImage(image: ImageProxy): Mat {
+    //    val yBuffer: ByteBuffer = image.planes[0].buffer
+    //    val uBuffer: ByteBuffer = image.planes[1].buffer
+    //    val vBuffer: ByteBuffer = image.planes[2].buffer
+    //    val ySize: Int = yBuffer.remaining()
+    //    val uSize: Int = uBuffer.remaining()
+    //    val vSize: Int = vBuffer.remaining()
+    //    val nv21 = ByteArray(ySize + uSize + vSize)
+    //    yBuffer.get(nv21, 0, ySize)
+    //    vBuffer.get(nv21, ySize, vSize)
+    //    uBuffer.get(nv21, ySize + vSize, uSize)
+    //    val yuv = Mat(image.height + image.height / 2, image.width, CvType.CV_8UC3)
+    //    yuv.put(0, 0, nv21)
+    //    val mat = Mat()
+    //    Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2RGB_NV21, 3)
+    //    return mat
+    //}
 
     fun fixMatRotation(matOrg: Mat, previewView: PreviewView?): Mat {
         val mat: Mat
@@ -183,83 +129,89 @@ object CameraUtil {
         )
     }
     fun keypointDetector(mat: Mat): MatOfKeyPoint {
-        val detector: SimpleBlobDetector =
-            SimpleBlobDetector.create(blobParamsInit())
-        val grey = Mat()
-        val thresh  = Mat()
-        Imgproc.cvtColor(mat, grey, Imgproc.COLOR_RGB2GRAY)
-        Imgproc.threshold(
-            grey,
-            thresh,
-            150.0,
-            255.0,
-            Imgproc.THRESH_BINARY
-        )
+        //val grey = Mat()
+        //val thresh  = Mat()
         val keypts = MatOfKeyPoint()
-        detector.detect(thresh, keypts)
+        //Imgproc.cvtColor(mat, grey, Imgproc.COLOR_RGB2GRAY)
+        //Imgproc.threshold(grey,thresh,150.0,255.0,Imgproc.THRESH_BINARY )
+        //detector.detect(thresh, keypts)
+        detector.detect(mat,keypts)
         return keypts
     }
     fun dominoArray(imgIn: Mat) :  ArrayList<Rect> {
         val grey = Mat()
         val thresh = Mat()
-        var dominoRect: ArrayList<Rect> = ArrayList()
-
-        Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_RGB2GRAY)
-        Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
+        val dominoRect = ArrayList<Rect>()
         val contours: List<MatOfPoint> = ArrayList()
         val contour2f = MatOfPoint2f()
-        Imgproc.findContours(
-            thresh,
-            contours,
-            Mat(), Imgproc.RETR_EXTERNAL,
-            Imgproc.CHAIN_APPROX_NONE
-        )
+        var peri: Double = 0.0
+        val poly = MatOfPoint2f()
+        var rectWrk = Rect()
+        Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_RGB2GRAY)
+        Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
+        Imgproc.findContours(thresh,contours,Mat(), Imgproc.RETR_EXTERNAL,
+                             Imgproc.CHAIN_APPROX_NONE)
+        Log.i("rectangles","Image has rows,cols ${thresh.rows()},${thresh.cols()}")
         contours.forEach { it ->
             it.convertTo(contour2f, CvType.CV_32FC2)
-            val peri = Imgproc.arcLength(contour2f, true)
-            val poly = MatOfPoint2f()
+            peri = Imgproc.arcLength(contour2f, true)
             Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
-            val rectWrk = Imgproc.boundingRect(poly)
-            // now we have a rectangle split it and see if we have domino points
-            //if(rectWrk.height*rectWrk.width > 5000 && rectWrk.height*rectWrk.width < 8000){
-            dominoRect.add(Imgproc.boundingRect(poly))
+            rectWrk = Imgproc.boundingRect(poly)
+            if((rectWrk.width < rectWrk.height && rectWrk.width > 90) ||
+                (rectWrk.height < rectWrk.width && rectWrk.height > 90)) {
+                  /*only adding rectangles with widths > 1 inch or height > 1 inch
+                   * based on 96 pixels in an inch
+                   * each domino has two halves, an 'a' and 'b' side, so we will modify
+                   * width < height then domino is taller than wider
+                   *  y,x ----- y,x+w
+                   *  y+h/2,x ----- y+h/2,x+w  so change rectA's H to h/2
+                   *  and change rectB's y to y+h/2
+                   */
 
-            //}
+                //Log.i("rectangles","wrkA(x,y,w,h) ${rectWrk.x},${rectWrk.y},${rectWrk.width}"+
+                //        ",${rectWrk.height} before")
+                if (rectWrk.width < rectWrk.height) {
+                    rectWrk.height = rectWrk.height / 2
+                    //still need to test this so right now I'm dropping these rectangles
+                    //Log.i("rectangles","width less than height")
+                }
+                else {
+                    if (rectWrk.width > rectWrk.height) {
+                        val splitW = rectWrk.width/2
+                        rectWrk.width = splitW
+
+                        dominoRect.add(rectWrk) // 'a' side
+                        //Log.i(
+                          //  "rectangles",
+                          //  "wrk_(x,y,w,h) ${rectWrk.x},${rectWrk.y},${rectWrk.width}" +
+                          //          ",${rectWrk.height} after")
+                        rectWrk = Imgproc.boundingRect(poly)
+                        rectWrk.x = (rectWrk.x + splitW)
+                        rectWrk.width = splitW
+                        dominoRect.add(rectWrk) //'b' side
+                        //Log.i(
+                        //    "rectangles",
+                        //    "wrk(x,y,w,h) ${rectWrk.x},${rectWrk.y},${rectWrk.width}" +
+                        //            ",${rectWrk.height} after"
+                        // )
+                    }
+                } //endof else
+
+            }  //end of if
         }
-        if (dominoRect.size < 20) {
-            val ptsOut = subMatDomino(imgIn, dominoRect)
-        }
+        dominoRect.sortedWith(compareByDescending{ it.y})  //first on row, then on col
+        dominoRect.sortedWith(compareByDescending { it.x })
 
     return dominoRect
 
     }
-    fun subMatDomino(matIn: Mat,rects: ArrayList<Rect>): ArrayList<Int>{
-        val img = matIn
-        val iRects = rects
-        var subRectWrk: Mat
-        var ptsA = 0
-        var ptsB = 0
+    fun PointsfromDomino(dominoRects: ArrayList<Rect>, imgIn: Mat) :ArrayList<Int>{
         val ptsOut = ArrayList<Int>()
-        Log.i("detect","image in rows,cols ${img.rows()},${img.cols()}")
-        iRects.forEach {
-            //x is rows y is cols.
-            if ( it.x > 6 && it.y >16) {
-                val rs = it.x
-                val rsW = it.x + it.width
-                val cs  = it.y
-                val cse = it.y + it.height
-                Log.i("detect","submat rowstart, row end, col start, col end"+
-                 " $cs, $cse, $rs, $rsW")
-                subRectWrk = img.submat(cs,cse,rs,rsW)
-                 ptsA = keypointDetector(subRectWrk).toList().size
-                 ptsB = keypointDetector(subRectWrk).toList().size
-            }
-            else { ptsA = 0; ptsB = 0
-            }
-            Log.i("detect", " ptsA is ${ptsA} ptsB is ${ptsB}")
-
+        dominoRects.forEach{
+            ptsOut += keypointDetector(imgIn.submat(it)).toList().size
+            Log.i("pts","${it.tl()},  ${ptsOut[ptsOut.size-1]}")
         }
-      return ptsOut
+        return ptsOut
     }
     fun Fragment.runOnUiThread(action: () -> Unit) {
         if (!isAdded) return
@@ -278,16 +230,21 @@ object CameraUtil {
         return result
     }
 
-    fun PutptsRectsonImage(rectanglesfromImage:ArrayList<Rect>,image :Mat) :Bitmap{
+    fun PutptsRectsonImage(rectanglesfromImage: ArrayList<Rect>,
+                           pts: ArrayList<Int>,image: Mat) :Bitmap{
         val bitmapOut: Bitmap
+        var totPoints = 0
+        var kep: MatOfKeyPoint
+        kep = keypointDetector(image.clone())
+        Features2d.drawKeypoints(image,kep,image,Scalar(0.0, 135.0,195.0)
+            , Features2d.DrawMatchesFlags_DRAW_OVER_OUTIMG)
 
-        rectanglesfromImage.forEach { Imgproc.rectangle(image,
-                    it, Scalar(255.0, 255.0, 100.0), 2, 0)
-        }
-        val kep = keypointDetector(image.clone())
-        Features2d.drawKeypoints(image,kep,image,Scalar(255.0, 255.0,0.0)
-                 , Features2d.DrawMatchesFlags_DEFAULT)
-
+        rectanglesfromImage.forEachIndexed { ind,it ->
+            Imgproc.rectangle(image,it, Scalar(100.0, 255.0, 100.0), 2, 0)
+            var nl = Point(it.tl().x+40,it.tl().y+ 45)
+            Imgproc.putText(image,
+                pts[ind].toString(),nl, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,0.0,2.0),3)
+          }
         bitmapOut = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.ARGB_8888)
         Utils.matToBitmap(image, bitmapOut)
         return bitmapOut

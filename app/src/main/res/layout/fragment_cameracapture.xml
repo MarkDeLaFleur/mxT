@@ -23,6 +23,18 @@ tools:context=".CameracaptureFragment">
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> cameracaptureFragment.takePhoto()}"
+                android:text="CAPTURE"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/viewPreview"
+                app:layout_constraintVertical_bias=".88" />
+
             <view
                 android:id="@+id/viewPreview"
                 class="androidx.camera.view.PreviewView"
@@ -32,18 +44,6 @@ tools:context=".CameracaptureFragment">
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/button8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CAPTURE"
-                android:onClick="@{() -> cameracaptureFragment.takePhoto()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/viewPreview"
-                app:layout_constraintVertical_bias=".88" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

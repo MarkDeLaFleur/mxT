@@ -1,5 +1,5 @@
 package com.delafleur.mxt.ui
-import android.content.Intent
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +8,11 @@ import androidx.fragment.app.Fragment
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.findNavController
+import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentCameraShowImageBinding
-import org.opencv.android.Utils
-import org.opencv.core.Mat
 
 class CameraShowImageFragment : Fragment() {
     private val sharedviewModel: SharedViewModel by activityViewModels()
@@ -38,17 +36,26 @@ class CameraShowImageFragment : Fragment() {
             sviewModel = sharedviewModel
             camerashowimageFragment = this@CameraShowImageFragment
         }
-        binding?.sviewModel?.bitmapX?.observe(viewLifecycleOwner, { bitty ->
-            Log.i("bitty","bitty is ${bitty.byteCount}")
-            binding?.imageView?.setImageBitmap(bitty)
+        binding?.sviewModel?.bitmapX?.observe(viewLifecycleOwner, { bitmapofDominos ->
+            binding?.imageView?.setImageBitmap(bitmapofDominos)
+            //Got here from cameracapture fragment when it updated the bitmapX image
         })
     }
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        Log.i("called","got here in the onCreate")
-        val bitum = Observer<Bitmap> {bitThing -> binding?.imageView?.setImageBitmap(bitThing)
-                    Log.i("called","setimageview ${bitThing.byteCount}")}
-        sharedviewModel.bitmapX.observe(this,bitum)
+        val bitmapUpdate = Observer<Bitmap> {bmU -> binding?.imageView?.setImageBitmap(bmU)
+                    Log.i("called","setimageview ${bmU.byteCount}")}
+        sharedviewModel.bitmapX.observe(this,bitmapUpdate)
+
+
+
+    }
+    fun onClickProcess(){
+        // user choses to process.
+        // setProcess updates the points that the detector found
+        Log.i("player","player ${sharedviewModel.playerIndex} called the Process camera button")
+        findNavController().navigate((R.id.action_cameraShowImageFragment_to_playersFragment))
+
     }
 
 

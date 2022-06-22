@@ -1,8 +1,9 @@
 package com.delafleur.mxt.util
 
-import android.graphics.Rect
+
 import android.os.Environment
 import android.util.Log
+import com.delafleur.mxt.data.Players
 import com.opencsv.CSVReader
 import com.opencsv.CSVWriter
 import java.io.File
@@ -12,17 +13,14 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-val fileName = "dominoS.csv"
+val fileName = "mXtrain.csv"
 val fileI = File(
     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
     fileName).absolutePath  // note this is actually returning a full pathname as a string
 val fileX = File(fileI)
-val inFile: MutableList<Array<String>> = mutableListOf()
-
-
 
 fun backupCSV(){
-    val fileNameOut = "dominoS" + DateTimeFormatter.ofPattern("YYYYLLLLddhhmmss").format(LocalDateTime.now()) + ".csv"
+    val fileNameOut = "dominoS" + DateTimeFormatter.ofPattern("yyyyLLLLddhhmmss").format(LocalDateTime.now()) + ".csv"
     val fileO = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),fileNameOut).absolutePath
     try{
         File(fileI).copyTo(File(fileO),overwrite = true)
@@ -36,16 +34,20 @@ fun backupCSV(){
 
 }
 fun writeCSV(scoreRecords: MutableList<Array<String>>){
-    /*
-    * this will write the updated players to the dominoscoresfile
-    * using xx.add("player","0","1","2").. etc.
-    * */
-    // create it if it doesn't exist
+
     Log.i("File", fileI)
     val fileWriter = FileWriter(fileX)
     val csvWriter = CSVWriter(fileWriter)
-    csvWriter.writeAll(scoreRecords)
-    csvWriter.close()
+    try {
+        csvWriter.writeAll(scoreRecords)
+        csvWriter.close()
+        Log.i("csvWriter","scorerecords size ${scoreRecords.size}")
+        scoreRecords.forEach{
+            Log.i("csvWriter","records written ${it.toList().toString()}")
+        }
+    }catch (e: IOException){
+        Log.e("IOException","${e.message} Exception on Write ")
+    }
     Log.i("myIO", "Wrote to file via csvWriter" + fileX.absolutePath)
 }
 fun checkFile() :String {
@@ -54,20 +56,13 @@ fun checkFile() :String {
         if (File(fileI).createNewFile()) {
             Log.i("File", "File Created")
             fileck = "new"
-            inFile.add(
-                arrayOf(
-                    "Player", "R00", "R01", "R02", "R03", "R04",
-                    "R05", "R06", "R07", "R08", "R09", "R10", "R11", "R12"
-                )
-            )
-            writeCSV(inFile)
-
+           // writeCSV(initCsvFile())
         } else {
             Log.i("File", "$fileI already exists")
             fileck = "old"
         }
     } catch (e: IOException) {
-        Log.i("File", "beats me!!")
+        Log.e("File", "Looks like ${e.message} caused the exception")
 
     }
     return fileck
@@ -76,32 +71,34 @@ fun checkFile() :String {
 fun readCSV() : MutableList<Array<String>> {
         var csvReaderData = mutableListOf<Array<String>>()
         try{
+            Log.i("myIO","reading csvFile fileX")
             csvReaderData = CSVReader(FileReader(fileX)).readAll()
+            Log.i("myIO","after reading csvReaderData size is ${csvReaderData.size}")
         } catch (e: IOException){
-            if (checkFile() == "new" ){
-                csvReaderData = inFile
-                Log.i("myIO", "Read csv file size is " + csvReaderData.size)
-            }
-            return csvReaderData
 
+            Log.i("myIO","Hit the exception area on ${e.message} checkFIle is ${checkFile()}")
+            if (checkFile() == "new" ) {
+                csvReaderData = initCsvFile()
+                Log.i("myIO", "csvreader data from initPlayers Table")
+                Log.e("IOException", "${e.message} Exception ")
+                return csvReaderData
+            }
         }
-        Log.i("myIO", "Read csv file size is " + csvReaderData.size)
         return csvReaderData
 }
+fun initCsvFile(): MutableList<Array<String>>{
 
-class Playerclass(xname: String) {
-        val name = xname
-        val scores: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        fun updateScores(inD: Int, pTs: Int) {
-             scores[inD] = pTs
-        }
+    //used to initialize a file for keeping player score
+    val outTable: MutableList<Array<String>> = mutableListOf()
+    val header = arrayOf("Header","12 ","11 ","10 ","09 ","08 ","07 ","06 "
+        ,"05 ","04 ","03 ","02 ","01 ","00 ")
+    outTable.add(header)
+    repeat(8){outTable.add(arrayOf(" ","0","0","0","0","0",
+                                             "0","0","0","0","0",
+                                             "0","0","0"))}
 
-        fun csvRecord(): Array<String> {
-            var outPutRecord: Array<String> = arrayOf(name)
-            scores.forEach { item ->
-                outPutRecord += item.toString()
-            }
-            return outPutRecord
-        }
+    return outTable
 }
+
+
 
