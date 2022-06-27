@@ -73,7 +73,10 @@ fun readCSV() : MutableList<Array<String>> {
         try{
             Log.i("myIO","reading csvFile fileX")
             csvReaderData = CSVReader(FileReader(fileX)).readAll()
-            Log.i("myIO","after reading csvReaderData size is ${csvReaderData.size}")
+            if (csvReaderData.size == 0){
+                Log.i("myIO","File was created loading playerT from initfile")
+                return initCsvFile()
+            }
         } catch (e: IOException){
 
             Log.i("myIO","Hit the exception area on ${e.message} checkFIle is ${checkFile()}")

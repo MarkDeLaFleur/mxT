@@ -51,9 +51,9 @@ class CameraShowImageFragment : Fragment() {
 
     }
     fun onClickProcess(){
-        // user choses to process.
-        // setProcess updates the points that the detector found
         Log.i("player","player ${sharedviewModel.playerIndex} called the Process camera button")
+        sharedviewModel.processCameraPoints()
+
         findNavController().navigate((R.id.action_cameraShowImageFragment_to_playersFragment))
 
     }

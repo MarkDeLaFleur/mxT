@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.delafleur.mxt.CameraUtil
 import com.delafleur.mxt.CameraUtil.checkPermissions
+import com.delafleur.mxt.CameraUtil.userRequestPermissions
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentCameracaptureBinding
@@ -56,6 +57,7 @@ class CameracaptureFragment : Fragment() {
             cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
             cameraController.imageCaptureTargetSize = CameraController.OutputSize(Size(700,900))
             cameraController.bindToLifecycle(viewLifecycleOwner)
+
             preview = view.findViewById<PreviewView>(R.id.viewPreview)
             preview.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
             preview.controller = cameraController

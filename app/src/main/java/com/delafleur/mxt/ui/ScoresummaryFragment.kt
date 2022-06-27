@@ -64,24 +64,28 @@ class ScoresummaryFragment : Fragment() {
         sharedViewModel.setRoundsScored()
 
     }
-
-
-
     fun onNewGameSelected() {
         /* do something cool like copy the file and delete the old one.
         * */
         backupCSV()
+        sharedViewModel.buildPlayersFromCSVrecords(readCSV())
+        sharedViewModel.setPlayerSummaries()
 
     }
-
     fun onReturnSelected(){
-
-        /*navigation time.
-        before we do, update the players records with names if the edit text fields have values
+        /*called from Enter Scores button via onClick="@{() -> scoresummaryFragment.onReturnSelected()}"
+        * pass the player text entry fields to sharedViewmodel update and let it take care*
+        * of updating the player table
         * */
-        val playerNamesArr = arrayOf(binding.TR1C1.text.toString(),binding.TR2C1.text.toString(),
-            binding.TR3C1.text.toString(),binding.TR4C1.text.toString(),binding.TR5C1.text.toString(),
-            binding.TR6C1.text.toString(),binding.TR7C1.text.toString(),binding.TR8C1.text.toString())
+        val playerNamesArr = arrayOf(
+            binding.TR1C1.text.toString(),
+            binding.TR2C1.text.toString(),
+            binding.TR3C1.text.toString(),
+            binding.TR4C1.text.toString(),
+            binding.TR5C1.text.toString(),
+            binding.TR6C1.text.toString(),
+            binding.TR7C1.text.toString(),
+            binding.TR8C1.text.toString())
         sharedViewModel.updatePtablefromPlayerNames(playerNamesArr)
         findNavController().navigate(R.id.action_scoresummaryFragment_to_playersFragment)
     }

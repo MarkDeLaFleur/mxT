@@ -49,13 +49,13 @@
 
         <TableLayout
             android:id="@+id/tableLayout"
-            android:layout_width="349dp"
-            android:layout_height="449dp"
+            android:layout_width="369dp"
+            android:layout_height="506dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.20">
+            app:layout_constraintVertical_bias="0.40">
 
             <TableRow
                 android:id="@+id/TR0"
@@ -290,7 +290,6 @@
                     android:id="@+id/TR8C3"
                     android:layout_width="224dp"
                     android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[7]}" />
             </TableRow>
         </TableLayout>

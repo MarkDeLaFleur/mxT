@@ -138,13 +138,51 @@ object CameraUtil {
         detector.detect(mat,keypts)
         return keypts
     }
+    fun dominoArrayofMat(imgIn: Mat) :ArrayList<Mat>{
+        val grey = Mat()
+        val thresh = Mat()
+        val dominoRect = ArrayList<Mat>()
+        val contours: List<MatOfPoint> = ArrayList()
+        val contour2f = MatOfPoint2f()
+        var peri: Double
+        val poly = MatOfPoint2f()
+        var rectWrk :Rect
+        var wrkMat :Mat
+        Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_RGB2GRAY)
+        Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
+        Imgproc.findContours(thresh,contours,Mat(), Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE)
+        contours.forEach { it ->
+            it.convertTo(contour2f, CvType.CV_32FC2)
+            peri = Imgproc.arcLength(contour2f, true)
+            Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
+            rectWrk = Imgproc.boundingRect(poly)
+            if((rectWrk.width < rectWrk.height && rectWrk.width > 90) ||
+                (rectWrk.height < rectWrk.width && rectWrk.height > 90)) {
+                wrkMat = Mat(imgIn, rectWrk)
+                if (wrkMat.height() < wrkMat.width()) Core.rotate(wrkMat,wrkMat,Core.ROTATE_90_CLOCKWISE)
+
+                Imgproc.resize(wrkMat, wrkMat, Size(75.0, 150.0))
+                dominoRect.add(wrkMat)
+                Log.i(
+                    "Mat", "Mat size is ${dominoRect[dominoRect.size - 1].width()}" +
+                            "by ${dominoRect[dominoRect.size - 1].height()}"
+                )
+            }
+        }
+            dominoRect.sortedWith(compareByDescending { it.rows()})  //first on row, then on col
+            dominoRect.sortedWith(compareByDescending { it.cols() })
+
+        return dominoRect
+
+    }
+
     fun dominoArray(imgIn: Mat) :  ArrayList<Rect> {
         val grey = Mat()
         val thresh = Mat()
         val dominoRect = ArrayList<Rect>()
         val contours: List<MatOfPoint> = ArrayList()
         val contour2f = MatOfPoint2f()
-        var peri: Double = 0.0
+        var peri: Double
         val poly = MatOfPoint2f()
         var rectWrk = Rect()
         Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_RGB2GRAY)
@@ -169,7 +207,8 @@ object CameraUtil {
                    */
 
                 //Log.i("rectangles","wrkA(x,y,w,h) ${rectWrk.x},${rectWrk.y},${rectWrk.width}"+
-                //        ",${rectWrk.height} before")
+                //        ",${rectWrk.height} before"
+                    // would be cool to get  array of mats using rect
                 if (rectWrk.width < rectWrk.height) {
                     rectWrk.height = rectWrk.height / 2
                     //still need to test this so right now I'm dropping these rectangles
