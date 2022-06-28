@@ -10,8 +10,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.delafleur.mxt.CameraUtil
 import com.delafleur.mxt.CameraUtil.JPGtoRGB888
+import com.delafleur.mxt.CameraUtil.PointsfromCroppedImage
 import com.delafleur.mxt.CameraUtil.PointsfromDomino
 import com.delafleur.mxt.CameraUtil.fixMatRotation
+import com.delafleur.mxt.CameraUtil.putNumbersOnCrops
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
 import org.opencv.core.Core
@@ -59,7 +61,7 @@ class SharedViewModel : ViewModel() {
         matCVT = fixMatRotation(matCVT, prev)
         Log.i("SharedViewModel", "MAT size row cols = ${matCVT.rows()},${matCVT.cols()}")
         val rectanglesfromImage = CameraUtil.dominoArray(matCVT)
-        val pts = PointsfromDomino(rectanglesfromImage, matCVT)
+        var pts = PointsfromDomino(rectanglesfromImage, matCVT)
         Log.i(
             "camera",
             "domino points ${pts.toList().toString()} rects ${rectanglesfromImage.size} "
@@ -67,13 +69,18 @@ class SharedViewModel : ViewModel() {
         //just a test
         var matCrops = CameraUtil.dominoArrayofMat(matCVT).toList()
         if (matCrops.size > 0) {
+            // before concatenation put the points on the matCrops
+            pts = PointsfromCroppedImage(matCrops)
             var newMat = Mat()
-            var smallList = listOf(matCrops[0],matCrops[1],matCrops[3])
+            matCrops = putNumbersOnCrops(matCrops,pts) // don't need to put a box around the image
+            var smallList = listOf(matCrops[0],matCrops[1],matCrops[2],matCrops[3],
+                                    matCrops[5],matCrops[6])
             Core.hconcat(smallList, newMat)
             var bitmapO = Bitmap.createBitmap(newMat.cols(), newMat.rows(), Bitmap.Config.ARGB_8888)
             Utils.matToBitmap(newMat, bitmapO)
             _bitmapx.value = bitmapO
-
+        // through here to work with pulling just the dominos from the camptured image rotating it
+            // then handing it off to the point counting routine.
         } else{
             if (rectanglesfromImage.size > 0)
                 _bitmapx.value =

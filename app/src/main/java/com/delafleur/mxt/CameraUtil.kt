@@ -22,6 +22,7 @@ import org.opencv.features2d.Features2d
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Moments
 import java.nio.ByteBuffer
 
 
@@ -129,15 +130,11 @@ object CameraUtil {
         )
     }
     fun keypointDetector(mat: Mat): MatOfKeyPoint {
-        //val grey = Mat()
-        //val thresh  = Mat()
         val keypts = MatOfKeyPoint()
-        //Imgproc.cvtColor(mat, grey, Imgproc.COLOR_RGB2GRAY)
-        //Imgproc.threshold(grey,thresh,150.0,255.0,Imgproc.THRESH_BINARY )
-        //detector.detect(thresh, keypts)
         detector.detect(mat,keypts)
         return keypts
     }
+
     fun dominoArrayofMat(imgIn: Mat) :ArrayList<Mat>{
         val grey = Mat()
         val thresh = Mat()
@@ -252,6 +249,14 @@ object CameraUtil {
         }
         return ptsOut
     }
+    fun PointsfromCroppedImage(cropList: List<Mat>): ArrayList<Int> {
+        val ptsOut = ArrayList<Int>()
+        cropList.forEach {
+            ptsOut += keypointDetector(it.submat(0, 75, 0, 75)).toList().size
+            ptsOut += keypointDetector(it.submat(75, 150, 0, 75)).toList().size
+        }
+        return ptsOut
+    }
     fun Fragment.runOnUiThread(action: () -> Unit) {
         if (!isAdded) return
         activity?.runOnUiThread(action)
@@ -279,13 +284,37 @@ object CameraUtil {
             , Features2d.DrawMatchesFlags_DRAW_OVER_OUTIMG)
 
         rectanglesfromImage.forEachIndexed { ind,it ->
-            Imgproc.rectangle(image,it, Scalar(100.0, 255.0, 100.0), 2, 0)
+            Imgproc.rectangle(image,it, Scalar(100.0, 255.0, 100.0,255.0), 2, 0)
             var nl = Point(it.tl().x+40,it.tl().y+ 45)
             Imgproc.putText(image,
-                pts[ind].toString(),nl, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,0.0,2.0),3)
+                pts[ind].toString(),nl, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,0.0,155.0),3)
           }
         bitmapOut = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.ARGB_8888)
         Utils.matToBitmap(image, bitmapOut)
         return bitmapOut
     }
+    fun putNumbersOnCrops(matList: List<Mat>,ptsIn :List<Int>): List<Mat>{
+        var matListOut = Array<Mat>(matList.size){Mat()}
+        var top = Point(150.0,30.0)
+        var bot = Point(30.0,150.0)
+        val grey = Mat()
+        if (ptsIn.size == matListOut.size * 2) {Log.i("numbers","images is twice numbers")
+            var ptsI = 0
+            matList.forEachIndexed {i,j -> matListOut[i] = j
+                var center = Point(0.0,0.0)
+                Imgproc.cvtColor(j, grey,Imgproc.COLOR_RGB2GRAY)
+                val mu  = Imgproc.moments(grey,true)
+                center.x = (mu.m10 / mu.m00) -5
+                center.y = (mu.m01 /mu.m00)
+                center.y.toInt()
+                Imgproc.putText(matListOut[i],
+                    ptsIn[ptsI].toString(),center, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,155.0,255.0),2)
+                Imgproc.putText(matListOut[i],
+                    ptsIn[ptsI+1].toString(),bot, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,155.0,255.0),2)
+               ptsI = ptsI+2
+            }
+        }
+        return matListOut.toList()
+    }
+
 }
