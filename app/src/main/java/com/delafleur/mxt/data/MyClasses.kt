@@ -2,7 +2,6 @@ package com.delafleur.mxt.data
 
 import kotlin.random.Random
 
-
 data class Players (var playerName: String){
     val testScore =  List(13){ Random.nextInt(0,155)}.map{it.toString()}.toTypedArray()
     val score = Array(13){"0"}

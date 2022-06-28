@@ -1,7 +1,6 @@
 package com.delafleur.mxt.data
 
 import android.graphics.Bitmap
-import android.text.BoringLayout
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
@@ -10,16 +9,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.delafleur.mxt.CameraUtil
 import com.delafleur.mxt.CameraUtil.JPGtoRGB888
-import com.delafleur.mxt.CameraUtil.PointsfromCroppedImage
-import com.delafleur.mxt.CameraUtil.PointsfromDomino
 import com.delafleur.mxt.CameraUtil.fixMatRotation
 import com.delafleur.mxt.CameraUtil.putNumbersOnCrops
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
 import org.opencv.core.Core
 import org.opencv.core.Mat
+import org.opencv.core.Point
 
 
+data class MySubmatDomino (var pts: List<Point>, var cropImg :List<Mat>)
 class SharedViewModel : ViewModel() {
 
 
@@ -57,48 +56,38 @@ class SharedViewModel : ViewModel() {
     fun imageRect (image : ImageProxy,prev: PreviewView) {
         val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
         var matCVT = Mat()
-        Utils.bitmapToMat(cvBitmap, matCVT)
+        Utils.bitmapToMat(cvBitmap, matCVT)  //matCVT is converted to BGRA 4 channel color
+        //Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
         matCVT = fixMatRotation(matCVT, prev)
         Log.i("SharedViewModel", "MAT size row cols = ${matCVT.rows()},${matCVT.cols()}")
-        val rectanglesfromImage = CameraUtil.dominoArray(matCVT)
-        var pts = PointsfromDomino(rectanglesfromImage, matCVT)
-        Log.i(
-            "camera",
-            "domino points ${pts.toList().toString()} rects ${rectanglesfromImage.size} "
-        )
-        //just a test
-        var matCrops = CameraUtil.dominoArrayofMat(matCVT).toList()
+        val specialK = CameraUtil.dominoArrayofMat(matCVT)
+        var matCrops = specialK.cropImg
+        val pts = specialK.pts
         if (matCrops.size > 0) {
-            // before concatenation put the points on the matCrops
-            pts = PointsfromCroppedImage(matCrops)
             var newMat = Mat()
-            matCrops = putNumbersOnCrops(matCrops,pts) // don't need to put a box around the image
-            var smallList = listOf(matCrops[0],matCrops[1],matCrops[2],matCrops[3],
-                                    matCrops[5],matCrops[6])
+            matCrops = putNumbersOnCrops(matCrops, pts) // don't need to put a box around the image
+            var smallList = listOf(
+                matCrops[0], matCrops[1], matCrops[2], matCrops[3],
+                matCrops[5], matCrops[6]
+            )
             Core.hconcat(smallList, newMat)
             var bitmapO = Bitmap.createBitmap(newMat.cols(), newMat.rows(), Bitmap.Config.ARGB_8888)
             Utils.matToBitmap(newMat, bitmapO)
             _bitmapx.value = bitmapO
-        // through here to work with pulling just the dominos from the camptured image rotating it
-            // then handing it off to the point counting routine.
-        } else{
-            if (rectanglesfromImage.size > 0)
-                _bitmapx.value =
-                    CameraUtil.PutptsRectsonImage(rectanglesfromImage, pts, matCVT) else
-                _bitmapx.value = cvBitmap!!
         }
         var showPoints = "Player " +  " Points "
         var totPts = 0
         if (pts.size > 0) {
             pts.forEach {
-                showPoints += it.toString() + " + "
+                showPoints += "("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
+                        ") + "
                 Log.i("pts", "$it + $totPts")
-                totPts += it
+                totPts += (it.x + it.y).toInt()
             }
-            showPoints =
-                showPoints.substring(0, showPoints.lastIndexOf("+")) + " = " + totPts.toString()
+            showPoints = showPoints.substring(0, showPoints.lastIndexOf("+")) +
+                        " = " + totPts.toString()
         }
-        _totalPoints.postValue( totPts.toString())
+        _totalPoints.postValue(totPts.toString())
         _displayPts.value = showPoints
         Log.i("ptsC","points from camera ${displayPts.value}")
         Log.i("ptsC","current domino button is ${currentRound.value}")
