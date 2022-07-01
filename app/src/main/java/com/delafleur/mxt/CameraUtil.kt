@@ -26,8 +26,12 @@ import java.nio.ByteBuffer
 
 private val REQUIRED_PERMISSIONS = arrayOf(
     "android.permission.CAMERA",
-    "android.permission.WRITE_EXTERNAL_STORAGE"
-)
+    "android.permission.WRITE_EXTERNAL_STORAGE")
+private val colorRed = Scalar(255.0,0.0,0.0,255.0)
+private val colorBlue = Scalar(0.0,0.0,255.0,255.0)
+private val colorGreen = Scalar(0.0,255.0,0.0,255.0)
+private val colorBlack = Scalar(255.0,255.0,255.0,255.0)
+private val colorWhite = Scalar(0.0,0.0,0.0,255.0)
 private val blobparms = blobParamsInit()
 private val detector: SimpleBlobDetector = SimpleBlobDetector.create(blobparms)
 object CameraUtil {
@@ -156,6 +160,7 @@ object CameraUtil {
         val poly = MatOfPoint2f()
         var rectWrk :Rect
         var wrkMat :Mat
+        var wrkPts :Point
         var ptsOutList = ArrayList<Point>()
         Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
@@ -172,7 +177,9 @@ object CameraUtil {
                     Core.rotate(wrkMat,wrkMat,Core.ROTATE_90_CLOCKWISE)}
                 Imgproc.resize(wrkMat, wrkMat, Size(75.0, 150.0))
                 //count the dominos
-                ptsOutList.add( PointsfromCroppedImage(wrkMat))
+                wrkPts = PointsfromCroppedImage(wrkMat)
+                ptsOutList.add(wrkPts)
+                putNumbersOnCrops(wrkMat,wrkPts)
                 dominoRect.add(wrkMat)  //cut it down to fixed
                 Log.i(
                     "Mat", "Mat size is ${dominoRect[dominoRect.size - 1].width()}" +
@@ -180,8 +187,8 @@ object CameraUtil {
                 )
             }
         }
-            dominoRect.sortedWith(compareByDescending { it.rows()})  //first on row, then on col
-            dominoRect.sortedWith(compareByDescending { it.cols() })
+           // dominoRect.sortedWith(compareByDescending { it.rows()})  //first on row, then on col
+           // dominoRect.sortedWith(compareByDescending { it.cols() })
 
         return  MySubmatDomino(pts = ptsOutList, cropImg = dominoRect)//dominoRect
 
@@ -199,25 +206,24 @@ object CameraUtil {
     }
 
 
-    fun putNumbersOnCrops(matList: List<Mat>, ptsIn :List<Point>): List<Mat>{
-        var matListOut = Array<Mat>(matList.size){Mat()}
+    fun putNumbersOnCrops(wrkMat: Mat, ptsIn :Point): Mat{
         var top = Point(150.0,30.0)
         var bot = Point(30.0,150.0)
         val grey = Mat()
-        Imgproc.cvtColor(matList[0], grey,Imgproc.COLOR_RGB2GRAY)
+        Imgproc.cvtColor(wrkMat, grey,Imgproc.COLOR_RGB2GRAY)
         val mu  = Imgproc.moments(grey,true)
-        var center = Point(0.0,0.0)
-        center.x = (mu.m10 / mu.m00) - 15.0
+        val center = Point(0.0,0.0)
+        center.x = (mu.m10 / mu.m00)
         center.y = (mu.m01 /mu.m00)
-        val centerH = Point((center.x - 15.0), center.y)
-        val centerL = Point((center.x + 15.0), center.y)
-        matList.forEachIndexed {i,j -> matListOut[i] = j
-               Imgproc.putText(matListOut[i],ptsIn[i].x.toInt().toString(),
-                   centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,155.0,255.0),2)
-                Imgproc.putText(matListOut[i],ptsIn[i].y.toInt().toString(),
-                    centerL, Imgproc.FONT_HERSHEY_SIMPLEX,1.0,Scalar(0.0,255.0,165.0,255.0),2)
-        }
-        return matListOut.toList()
+        val centerH = Point((center.x - 10.0) , (center.y - 25.0))
+        val centerL = Point((center.x - 10.0), (center.y + 35.0))
+        Log.i("Centers","X is ${center.x} Y is  ${center.y} H is ${centerH.y} L is ${centerL.y}")
+        Imgproc.putText(wrkMat,ptsIn.x.toInt().toString(),
+                   centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.1, colorBlue,2)
+        Imgproc.putText(wrkMat,ptsIn.y.toInt().toString(),
+                   centerL, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorGreen,2)
+        return wrkMat
+
     }
 
 }

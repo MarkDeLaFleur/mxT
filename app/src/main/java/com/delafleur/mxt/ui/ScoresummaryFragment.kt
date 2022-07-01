@@ -43,8 +43,15 @@ class ScoresummaryFragment : Fragment() {
             scoresummaryFragment = this@ScoresummaryFragment
         }
         binding.scoresummaryFragment = this
-        sharedViewModel.buildPlayersFromCSVrecords(readCSV())
+        Log.i("readcsv","called from scoresummaryFragment create View")
+        if (sharedViewModel.playerT.size == 0 ){
+            Log.i("frag","playerT must be empty")
+            sharedViewModel.buildPlayersFromCSVrecords(readCSV())
+        }
+        sharedViewModel.setRoundsScored()
+
         sharedViewModel.setPlayerSummaries()
+
    /*     playerNames.forEachIndexed{ind,it ->
             it.setOnFocusChangeListener { _, hasFocus ->
                 if(!hasFocus){
@@ -61,16 +68,20 @@ class ScoresummaryFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        sharedViewModel.setRoundsScored()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("resuming Scoresummary","resume score summary")
 
     }
+
     fun onNewGameSelected() {
         /* do something cool like copy the file and delete the old one.
         * */
         backupCSV()
         sharedViewModel.buildPlayersFromCSVrecords(readCSV())
-        sharedViewModel.setPlayerSummaries()
-
+        sharedViewModel.setVisibiltyNewGame()
     }
     fun onReturnSelected(){
         /*called from Enter Scores button via onClick="@{() -> scoresummaryFragment.onReturnSelected()}"
@@ -86,6 +97,7 @@ class ScoresummaryFragment : Fragment() {
             binding.TR6C1.text.toString(),
             binding.TR7C1.text.toString(),
             binding.TR8C1.text.toString())
+        Log.i("frag","scoreSumary enter scores calling updatePtablefromPlayernames")
         sharedViewModel.updatePtablefromPlayerNames(playerNamesArr)
         findNavController().navigate(R.id.action_scoresummaryFragment_to_playersFragment)
     }

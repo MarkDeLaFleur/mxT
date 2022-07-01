@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentPlayersBinding
+import com.delafleur.mxt.util.writeCSV
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -48,7 +49,7 @@ class PlayersFragment : Fragment() {
             sharedVM = sharedViewModel
             playersFragment = this@PlayersFragment
         }
-        Log.i("frag","players ${sharedViewModel.playerT[0].record[0]}")
+        Log.i("frag","player fragment - view created doing setplayer summaries")
         sharedViewModel.setPlayerSummaries()
         val checkCameraPts = Observer<String> { pts -> camPts = pts }
         sharedViewModel.totalPoints.observe(viewLifecycleOwner, checkCameraPts)
@@ -75,12 +76,15 @@ class PlayersFragment : Fragment() {
             binding.editTextNumber7.text.toString(),
             binding.editTextNumber8.text.toString()
         )
+        Log.i("frag","playersFrag domino button click")
         sharedViewModel.addScoresToPlayerT(dominoButtonRound, scoresIn)
 
 
     }
 
     fun onScoreSummaryButtonClicked() {
+        //update the csvfile when navigating back to summary
+        writeCSV(sharedViewModel.buildCsvRecordsFromPlayerT())
         findNavController().navigate(R.id.action_playersFragment_to_scoresummaryFragment)
 
     }

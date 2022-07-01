@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ScoresummaryFragment">
 <data>
+    <import type="android.view.View"/>
     <variable
         name="sharedVM"
         type="com.delafleur.mxt.data.SharedViewModel"/>
@@ -91,6 +92,7 @@
                 android:id="@+id/TR1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="@{sharedVM.playerVisibility[0] ? View.VISIBLE : View.INVISIBLE}"
                 android:paddingVertical="4dp">
 
                 <EditText
@@ -116,6 +118,7 @@
 
             <TableRow
                 android:id="@+id/TR2"
+                android:visibility="@{sharedVM.playerVisibility[1] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingVertical="4dp">
@@ -143,7 +146,7 @@
             <TableRow
                 android:id="@+id/TR3"
                 android:layout_width="match_parent"
-
+                android:visibility="@{sharedVM.playerVisibility[2] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_height="match_parent"
                 android:paddingVertical="4dp">
 
@@ -169,6 +172,7 @@
             <TableRow
                 android:id="@+id/TR4"
                 android:layout_width="match_parent"
+                android:visibility="@{sharedVM.playerVisibility[3] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_height="match_parent"
                 android:paddingVertical="4dp">
 
@@ -194,6 +198,7 @@
 
             <TableRow
                 android:id="@+id/TR5"
+                android:visibility="@{sharedVM.playerVisibility[4] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingVertical="4dp">
@@ -220,6 +225,7 @@
 
             <TableRow
                 android:id="@+id/TR6"
+                android:visibility="@{sharedVM.playerVisibility[5] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="4dp">
@@ -245,6 +251,7 @@
 
             <TableRow
                 android:id="@+id/TR7"
+                android:visibility="@{sharedVM.playerVisibility[6] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="4dp">
@@ -270,6 +277,7 @@
 
             <TableRow
                 android:id="@+id/TR8"
+                android:visibility="@{sharedVM.playerVisibility[7] ? View.VISIBLE : View.INVISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="4dp">

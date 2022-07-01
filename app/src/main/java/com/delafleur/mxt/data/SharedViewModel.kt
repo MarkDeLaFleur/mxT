@@ -18,7 +18,6 @@ import org.opencv.core.Mat
 import org.opencv.core.Point
 
 
-data class MySubmatDomino (var pts: List<Point>, var cropImg :List<Mat>)
 class SharedViewModel : ViewModel() {
 
 
@@ -60,15 +59,12 @@ class SharedViewModel : ViewModel() {
         //Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
         matCVT = fixMatRotation(matCVT, prev)
         Log.i("SharedViewModel", "MAT size row cols = ${matCVT.rows()},${matCVT.cols()}")
-        val specialK = CameraUtil.dominoArrayofMat(matCVT)
-        var matCrops = specialK.cropImg
-        val pts = specialK.pts
-        if (matCrops.size > 0) {
+        val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
+        if (wrkMySubmatDomino.cropImg.size > 0) {
             var newMat = Mat()
-            matCrops = putNumbersOnCrops(matCrops, pts) // don't need to put a box around the image
             var smallList = listOf(
-                matCrops[0], matCrops[1], matCrops[2], matCrops[3],
-                matCrops[5], matCrops[6]
+                wrkMySubmatDomino.cropImg[0], wrkMySubmatDomino.cropImg[1],wrkMySubmatDomino.cropImg[2], wrkMySubmatDomino.cropImg[3],
+                wrkMySubmatDomino.cropImg[4], wrkMySubmatDomino.cropImg[5]
             )
             Core.hconcat(smallList, newMat)
             var bitmapO = Bitmap.createBitmap(newMat.cols(), newMat.rows(), Bitmap.Config.ARGB_8888)
@@ -77,8 +73,8 @@ class SharedViewModel : ViewModel() {
         }
         var showPoints = "Player " +  " Points "
         var totPts = 0
-        if (pts.size > 0) {
-            pts.forEach {
+        if (wrkMySubmatDomino.pts.size > 0) {
+            wrkMySubmatDomino.pts.forEach {
                 showPoints += "("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
                         ") + "
                 Log.i("pts", "$it + $totPts")
@@ -98,6 +94,8 @@ class SharedViewModel : ViewModel() {
         _playerIndex.value =  strg
         Log.i("view","player ${strg}")
     }
+    fun setVisibiltyNewGame () {_playerVisibility.value = mutableListOf<Boolean>(true,true,true,true,true,
+    true,true,true)}
 
     fun setRoundsScored()  {
         // we want to find out which rounds have been scored so we look at each player's score or
@@ -107,7 +105,10 @@ class SharedViewModel : ViewModel() {
         var rsNf = "Not Completed    "
         // looping through all the players to see if 'any' of the players have a score for a round
         playerT.forEach{
-             it.score.forEachIndexed{i,j ->
+            Log.i("anyscores","checking scores for each player ${it.playerName}" +
+                    "'s score is ${it.csvRecord().toList()}")
+
+            it.score.forEachIndexed{i,j ->
                    if(j != "0")  rsAnyScoreInRound[i] = true
             }
         }
@@ -143,10 +144,9 @@ class SharedViewModel : ViewModel() {
     }
     fun setPlayerSummaries(){
         val visibilityList = MutableList<Boolean>(8){true}
-
         visibilityList.forEachIndexed { i, it ->
-            Log.i("visi","player i ${playerT[i].record[0].length}")
-            if (playerT[i].record[0].length < 2) {
+            Log.i("visi","player i ${playerT[i].playerName.length}")
+            if (playerT[i].playerName.length < 2) {
                 visibilityList[i] = false
             }
         }
@@ -155,9 +155,9 @@ class SharedViewModel : ViewModel() {
             visibilityList[0],visibilityList[1],visibilityList[2],visibilityList[3],
             visibilityList[4],visibilityList[5],visibilityList[6],visibilityList[7])
         _playerLiveDataName.value = mutableListOf(
-            playerT[0].record[0],playerT[1].record[0],playerT[2].record[0],
-            playerT[3].record[0],playerT[4].record[0],playerT[5].record[0],
-            playerT[6].record[0],playerT[7].record[0])
+            playerT[0].playerName,playerT[1].playerName,playerT[2].playerName,
+            playerT[3].playerName,playerT[4].playerName,playerT[5].playerName,
+            playerT[6].playerName,playerT[7].playerName)
 
         //change scoreTotalStrTest to scoreTotalStr and scoreTotIntTest to scoreTotInt
         _playerLiveDataSumStr.value = mutableListOf(
@@ -180,24 +180,13 @@ class SharedViewModel : ViewModel() {
         /* Using CSV records from file. First record is a header record but we don't use it.
         when we create the output, since it could be used in a spread sheet, we insert the header.
         *  */
-        // initialize it first
-        //playerT = mutableListOf()
-
-
-        Log.i("playerTable","player table inPut size is ${inPut.size}")
-        inPut.forEachIndexed{i,j ->
-            if (i>0){
-                /*  building the player table from the csv Record. playerT is an array of class
-                Players that is initialized from csv Record - name if field 1 of the csv record 2
-                scores are fields 2 - 14 ( ROUNDS 0 THROUGH  12 ) for each player
-                * */
-                val tP = Players(j[0])  //input from csv record field 0 is player Name
-                val jless1 = j.drop(1).toTypedArray()
+        playerT = mutableListOf()
+        Log.i("BuildplayerTable","player table inPut size is ${inPut.size}")
+        inPut.forEachIndexed { i, j ->
+            if (i > 0) {  //skip the header
+                val tP = Players(j[0])
                 playerT.add(tP)
-                //jless1.forEachIndexed {indices,it ->
-                //    playerT[playerT.size-1].testScore[indices] = it  //change to score for real
-                //}
-                Log.i("playerT","${playerT[playerT.size-1].playerName} is ${playerT[i-1].score.toList()}")
+                playerT[playerT.size-1].score = j.copyOfRange(1,j.size) //getting the score from the csv record
             }
         }
     }
@@ -215,29 +204,37 @@ class SharedViewModel : ViewModel() {
         Log.i("scoresUpdate","current round value ${currentRound.value}")
         if(currentRound.value != dominoButton ){
              refreshScoreLiveData(dominoButton)
-            _roundScored.value = "Round " + dominoButton.toString() + " Values are --> "
+            _roundScored.value = "Round " + dominoButton.toString() + " VALUES --> "
             _currentRound.value = dominoButton
-
-
         }
         else{
-            _roundScored.value = "Round " + dominoButton.toString() + "have been UPDATED"
+            _roundScored.value = "Round " + dominoButton.toString() + " UPDATED -->"
             _currentRound!!.value = null
             scoresToAdd.forEachIndexed { i, j ->
-                if (j == "") playerT[i].score[dominoButton] = "0" else j
-            }
+               if (j.length > 0 && playerT[i].playerName.length > 1) {
+                    playerT[i].score[dominoButton] = j}
+                }
+
+            //writeCSV(buildCsvRecordsFromPlayerT()) hold off updating here until they go to summaries
+            setRoundsScored()
+            setPlayerSummaries()
+
+
         }
     }
     fun updatePtablefromPlayerNames(playerNamesArr: Array<String>) {
        playerNamesArr.forEachIndexed{  i, rec ->
-            if (rec != playerT[i].record[0] ) {
-                    playerT[i].record[0] = rec
+            if (rec != " ") {
+                    playerT[i].playerName = rec
                 }
         }
-        playerT.forEach { Log.i("out","PlayerT record ${it.record.toList().joinToString()}")
-            Log.i("out","PlayerT playerName ${it.playerName}")}
-        writeCSV(buildCsvRecordsFromPlayerT())
+        playerT.forEach { Log.i("out","PlayerT record ${it.csvRecord().toList().joinToString()}")
+            Log.i("updatePtable","PlayerT playerName ${it.playerName}")
+        }
 
+        writeCSV(buildCsvRecordsFromPlayerT())
+        setRoundsScored()
+        setPlayerSummaries()
     }
     fun buildCsvRecordsFromPlayerT() :MutableList<Array<String>>{
         // returns a csvRecord Table used by csvWrite
@@ -246,14 +243,11 @@ class SharedViewModel : ViewModel() {
         val outRec = mutableListOf<Array<String>>()
         outRec.add(header)
         playerT.forEach{
-            Log.i("outrec","outRec = ${it.record.toList().toString()}")
-            outRec.add(it.record)
+            Log.i("outrec","outrec CSV fun ${it.csvRecord().toList()}")
+            outRec.add(it.csvRecord())
         }
         Log.i("outRec","outRec size is ${outRec.size}")
         return outRec
-    }
-    fun checkPts(playerNo: Int) :Int{
-        return(playerT[playerNo].record[0].toInt())
     }
 
 

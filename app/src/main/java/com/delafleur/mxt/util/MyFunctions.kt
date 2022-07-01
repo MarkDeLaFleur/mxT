@@ -13,7 +13,7 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-val fileName = "mXtrain.csv"
+val fileName = "mXtrainTest.csv"
 val fileI = File(
     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
     fileName).absolutePath  // note this is actually returning a full pathname as a string
@@ -80,12 +80,12 @@ fun readCSV() : MutableList<Array<String>> {
         } catch (e: IOException){
 
             Log.i("myIO","Hit the exception area on ${e.message} checkFIle is ${checkFile()}")
-            if (checkFile() == "new" ) {
+            Log.i("myIO", "csvreader data from initPlayers Table")
+            Log.e("IOException", "${e.message} Exception ")
                 csvReaderData = initCsvFile()
-                Log.i("myIO", "csvreader data from initPlayers Table")
-                Log.e("IOException", "${e.message} Exception ")
+                writeCSV(csvReaderData)
                 return csvReaderData
-            }
+
         }
         return csvReaderData
 }
