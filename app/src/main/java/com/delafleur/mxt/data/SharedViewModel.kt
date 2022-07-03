@@ -1,6 +1,7 @@
 package com.delafleur.mxt.data
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
@@ -10,12 +11,10 @@ import androidx.lifecycle.ViewModel
 import com.delafleur.mxt.CameraUtil
 import com.delafleur.mxt.CameraUtil.JPGtoRGB888
 import com.delafleur.mxt.CameraUtil.fixMatRotation
-import com.delafleur.mxt.CameraUtil.putNumbersOnCrops
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
-import org.opencv.core.Core
 import org.opencv.core.Mat
-import org.opencv.core.Point
+import org.opencv.core.Rect
 
 
 class SharedViewModel : ViewModel() {
@@ -55,22 +54,20 @@ class SharedViewModel : ViewModel() {
     fun imageRect (image : ImageProxy,prev: PreviewView) {
         val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
         var matCVT = Mat()
-        Utils.bitmapToMat(cvBitmap, matCVT)  //matCVT is converted to BGRA 4 channel color
-        //Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
+        Utils.bitmapToMat(cvBitmap, matCVT)
+        /*matCVT is converted to BGRA 4 channel color
+        * Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
+        * But Scalar colors are B G R A where A is the transaparency I coded a few colors in
+        * camerautil so I wouldnt forget that
+        * */
         matCVT = fixMatRotation(matCVT, prev)
+
         Log.i("SharedViewModel", "MAT size row cols = ${matCVT.rows()},${matCVT.cols()}")
+        Log.i("SharedViewModel","Preview size (w/h) is ${prev.width} by ${prev.height}")
         val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
-        if (wrkMySubmatDomino.cropImg.size > 0) {
-            var newMat = Mat()
-            var smallList = listOf(
-                wrkMySubmatDomino.cropImg[0], wrkMySubmatDomino.cropImg[1],wrkMySubmatDomino.cropImg[2], wrkMySubmatDomino.cropImg[3],
-                wrkMySubmatDomino.cropImg[4], wrkMySubmatDomino.cropImg[5]
-            )
-            Core.hconcat(smallList, newMat)
-            var bitmapO = Bitmap.createBitmap(newMat.cols(), newMat.rows(), Bitmap.Config.ARGB_8888)
-            Utils.matToBitmap(newMat, bitmapO)
-            _bitmapx.value = bitmapO
-        }
+
+
+        _bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
         var showPoints = "Player " +  " Points "
         var totPts = 0
         if (wrkMySubmatDomino.pts.size > 0) {
@@ -250,7 +247,27 @@ class SharedViewModel : ViewModel() {
         return outRec
     }
 
-
+    private fun combineImageIntoOne(bitmap: ArrayList<Bitmap>,cWidth: Int,cHeight: Int): Bitmap? {
+        var w = 0
+        var h = 0
+        val temp = Bitmap.createBitmap(cWidth, cHeight,Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(temp)
+        Log.i("HTML","Canvas width height is ${canvas.width}/${canvas.height}")
+        var top = bitmap[0].height
+        var left = 20
+        for (i in bitmap.indices ) {
+            canvas.drawBitmap(bitmap[i], left.toFloat(), top.toFloat(), null)
+            if (left > (cWidth - 300) ) {
+                left = 20
+                top  += bitmap[i].height + 20
+            }
+            else
+            {
+                left += bitmap[i].width + 30
+            }
+        }
+        return temp
+    }
 
 
 }

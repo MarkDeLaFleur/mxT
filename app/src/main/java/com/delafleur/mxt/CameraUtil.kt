@@ -12,11 +12,13 @@ import android.view.Surface
 import androidx.camera.camera2.Camera2Config
 import androidx.camera.core.*
 import androidx.camera.view.PreviewView
+import androidx.compose.runtime.key
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delafleur.mxt.CameraUtil.blobParamsInit
 import com.delafleur.mxt.data.MySubmatDomino
+import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
@@ -27,11 +29,11 @@ import java.nio.ByteBuffer
 private val REQUIRED_PERMISSIONS = arrayOf(
     "android.permission.CAMERA",
     "android.permission.WRITE_EXTERNAL_STORAGE")
-private val colorRed = Scalar(255.0,0.0,0.0,255.0)
-private val colorBlue = Scalar(0.0,0.0,255.0,255.0)
-private val colorGreen = Scalar(0.0,255.0,0.0,255.0)
-private val colorBlack = Scalar(255.0,255.0,255.0,255.0)
-private val colorWhite = Scalar(0.0,0.0,0.0,255.0)
+val colorRed = Scalar(255.0,0.0,0.0,255.0)
+val colorBlue = Scalar(0.0,0.0,255.0,255.0)
+val colorGreen = Scalar(0.0,255.0,0.0,255.0)
+val colorBlack = Scalar(50.0,50.0,0.0,255.0)
+val colorWhite = Scalar(0.0,0.0,0.0,255.0)
 private val blobparms = blobParamsInit()
 private val detector: SimpleBlobDetector = SimpleBlobDetector.create(blobparms)
 object CameraUtil {
@@ -150,10 +152,15 @@ object CameraUtil {
         return keypts
     }
 
-    fun dominoArrayofMat(imgIn: Mat) :MySubmatDomino {//:ArrayList<Mat>{
+    fun dominoArrayofMat(imgIn: Mat) :MySubmatDomino {
         val grey = Mat()
         val thresh = Mat()
-        val dominoRect = ArrayList<Mat>()
+        val dominoBitmaps = ArrayList<Bitmap>()
+    //    var wrkMatBlue  = Mat()  // used as a way to put a little color between the submat images
+    //    Imgproc.resize(Mat(imgIn.size(),imgIn.type(), colorBlue),
+    //                    wrkMatBlue, Size(34.0,150.0))
+    //    val bitmapBlue = Bitmap.createBitmap(wrkMatBlue.cols(), wrkMatBlue.rows(), Bitmap.Config.ARGB_8888)
+    //    Utils.matToBitmap(wrkMatBlue, bitmapBlue)  // do this once.
         val contours: List<MatOfPoint> = ArrayList()
         val contour2f = MatOfPoint2f()
         var peri: Double
@@ -175,53 +182,52 @@ object CameraUtil {
                 wrkMat = Mat(imgIn, rectWrk)   //cropping image
                 if (wrkMat.height() < wrkMat.width()) {
                     Core.rotate(wrkMat,wrkMat,Core.ROTATE_90_CLOCKWISE)}
-                Imgproc.resize(wrkMat, wrkMat, Size(75.0, 150.0))
+
+                Imgproc.resize(wrkMat, wrkMat, Size(150.0, 300.0))
                 //count the dominos
                 wrkPts = PointsfromCroppedImage(wrkMat)
                 ptsOutList.add(wrkPts)
                 putNumbersOnCrops(wrkMat,wrkPts)
-                dominoRect.add(wrkMat)  //cut it down to fixed
-                Log.i(
-                    "Mat", "Mat size is ${dominoRect[dominoRect.size - 1].width()}" +
-                            "by ${dominoRect[dominoRect.size - 1].height()}"
-                )
+                var wrkBitmap = Bitmap.createBitmap(wrkMat.cols(), wrkMat.rows(), Bitmap.Config.ARGB_8888)
+                Utils.matToBitmap(wrkMat, wrkBitmap)
+                dominoBitmaps.add(wrkBitmap)
+    //            dominoBitmaps.add(bitmapBlue)
             }
         }
            // dominoRect.sortedWith(compareByDescending { it.rows()})  //first on row, then on col
            // dominoRect.sortedWith(compareByDescending { it.cols() })
-
-        return  MySubmatDomino(pts = ptsOutList, cropImg = dominoRect)//dominoRect
-
+        Log.i("bitmaps","passing ${dominoBitmaps.size} back from dominoArrayofMat")
+        return  MySubmatDomino(pts = ptsOutList,bitmapImgs = dominoBitmaps)
     }
 
     fun PointsfromCroppedImage(cropImage: Mat) :Point{
-         val ptsOut = Point(0.0,0.0)
-         ptsOut.x = (keypointDetector(cropImage.submat(0, 75, 0, 75)).toList().size).toDouble()
-        ptsOut.y  = (keypointDetector(cropImage.submat(75, 150, 0, 75)).toList().size).toDouble()
+       val ptsOut = Point(0.0,0.0)
+       ptsOut.x = (keypointDetector(cropImage.submat(0, 150, 0, 150)).toList().size).toDouble()
+       ptsOut.y  = (keypointDetector(cropImage.submat(150, 300, 0, 150)).toList().size).toDouble()
+
         return ptsOut
     }
     fun Fragment.runOnUiThread(action: () -> Unit) {
-        if (!isAdded) return
-        activity?.runOnUiThread(action)
+       if (!isAdded) return
+       activity?.runOnUiThread(action)
     }
 
 
     fun putNumbersOnCrops(wrkMat: Mat, ptsIn :Point): Mat{
-        var top = Point(150.0,30.0)
-        var bot = Point(30.0,150.0)
         val grey = Mat()
         Imgproc.cvtColor(wrkMat, grey,Imgproc.COLOR_RGB2GRAY)
         val mu  = Imgproc.moments(grey,true)
         val center = Point(0.0,0.0)
         center.x = (mu.m10 / mu.m00)
         center.y = (mu.m01 /mu.m00)
-        val centerH = Point((center.x - 10.0) , (center.y - 25.0))
-        val centerL = Point((center.x - 10.0), (center.y + 35.0))
-        Log.i("Centers","X is ${center.x} Y is  ${center.y} H is ${centerH.y} L is ${centerL.y}")
+        val centerH = Point((center.x - 20.0) , (center.y - 60.0))
+        val centerL = Point((center.x - 20.0), (center.y + 90.0))
         Imgproc.putText(wrkMat,ptsIn.x.toInt().toString(),
-                   centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.1, colorBlue,2)
+                   centerH, Imgproc.FONT_HERSHEY_SIMPLEX,2.0, colorBlack,
+            4,1,false)
         Imgproc.putText(wrkMat,ptsIn.y.toInt().toString(),
-                   centerL, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorGreen,2)
+                   centerL, Imgproc.FONT_HERSHEY_SIMPLEX,2.0, colorBlack,
+            4,1,false)
         return wrkMat
 
     }

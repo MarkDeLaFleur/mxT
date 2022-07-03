@@ -1,5 +1,6 @@
 package com.delafleur.mxt.data
 
+import android.graphics.Bitmap
 import org.opencv.core.Mat
 import org.opencv.core.Point
 import kotlin.random.Random
@@ -31,6 +32,9 @@ data class Players (var playerName: String){
     }
 
 }
-data class MySubmatDomino (var pts: List<Point>, var cropImg :List<Mat>)
+data class MySubmatDomino(
+    var pts: List<Point>,
+    val bitmapImgs: ArrayList<Bitmap>
+)
 
 

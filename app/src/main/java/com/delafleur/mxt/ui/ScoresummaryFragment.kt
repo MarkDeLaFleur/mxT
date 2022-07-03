@@ -1,17 +1,12 @@
 package com.delafleur.mxt.ui
 
+
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TableRow
-import android.widget.TextView
-import androidx.core.view.isVisible
+import android.widget.Toolbar
+import androidx.appcompat.view.SupportActionModeWrapper
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.delafleur.mxt.R
@@ -32,9 +27,19 @@ class ScoresummaryFragment : Fragment() {
         savedInstanceState: Bundle?): View? {
         val fragmentBinding = FragmentScoresummaryBinding.inflate(inflater, container, false)
         _binding = fragmentBinding
+        setHasOptionsMenu(true)
         return fragmentBinding.root
         }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.thenavdrawer,   menu)
+        _binding!!.toolbarMxT.inflateMenu(R.menu.thenavdrawer)
+        binding.toolbarMxT.title = "??"
+        activity?.setTitle("not lookin for a string")
+
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.apply {
@@ -48,9 +53,11 @@ class ScoresummaryFragment : Fragment() {
             Log.i("frag","playerT must be empty")
             sharedViewModel.buildPlayersFromCSVrecords(readCSV())
         }
+
         sharedViewModel.setRoundsScored()
 
         sharedViewModel.setPlayerSummaries()
+
 
    /*     playerNames.forEachIndexed{ind,it ->
             it.setOnFocusChangeListener { _, hasFocus ->

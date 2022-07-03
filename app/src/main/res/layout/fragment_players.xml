@@ -17,7 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:foregroundGravity="bottom">
 
 
         <TextView
@@ -74,16 +75,16 @@
                     android:id="@+id/imageButton12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(12)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[12] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(12)}"
                     android:src="@drawable/ic_doubletwelve" />
 
                 <ImageButton
                     android:id="@+id/imageButton11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(11)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[11] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(11)}"
                     android:src="@drawable/ic_doubleeleven" />
 
                 <ImageButton
@@ -91,8 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(10)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[10] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(10)}"
                     android:src="@drawable/ic_doubleten" />
 
                 <ImageButton
@@ -100,8 +101,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(9)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[9] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(9)}"
                     android:src="@drawable/ic_doublenine" />
 
                 <ImageButton
@@ -109,8 +110,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(8)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[8] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(8)}"
                     android:src="@drawable/ic_doubleeight" />
 
                 <ImageButton
@@ -118,8 +119,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(7)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[7] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(7)}"
                     android:src="@drawable/ic_doubleseven" />
 
                 <ImageButton
@@ -127,8 +128,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(6)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[6] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(6)}"
                     android:src="@drawable/ic_doublesix" />
 
                 <ImageButton
@@ -136,8 +137,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(5)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[5] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(5)}"
                     android:src="@drawable/ic_doublefive" />
 
                 <ImageButton
@@ -145,8 +146,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(4)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[4] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(4)}"
                     android:src="@drawable/ic_doublefour" />
 
                 <ImageButton
@@ -154,8 +155,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(3)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[3] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(3)}"
                     android:src="@drawable/ic_doublethree" />
 
                 <ImageButton
@@ -163,8 +164,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(2)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[2] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(2)}"
                     android:src="@drawable/ic_doubletwo" />
 
                 <ImageButton
@@ -172,8 +173,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(1)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[1] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(1)}"
                     android:src="@drawable/ic_doubleone" />
 
                 <ImageButton
@@ -181,8 +182,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(0)}"
                     android:backgroundTint="@{sharedVM.scoredRounds[0] ? @color/Green : @color/Grey}"
+                    android:onClick="@{() -> playersFragment.onDominoButtonClicked(0)}"
                     android:src="@drawable/ic_doubleblank" />
             </LinearLayout>
         </HorizontalScrollView>
@@ -191,9 +192,8 @@
             android:id="@+id/tableLayout2"
             android:layout_width="316dp"
             android:layout_height="419dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp"
-            android:textAlignment="gravity"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.3"
@@ -205,68 +205,71 @@
                 android:id="@+id/TR1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:visibility="@{sharedVM.playerVisibility[0] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#CDDC39"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[0] ? View.VISIBLE : View.INVISIBLE}">
 
 
                 <TextView
                     android:id="@+id/TextPersonName1"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
-                    android:text="@{sharedVM.playerLiveDataName[0]}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textSize="14sp" />
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
+                    android:text="@{sharedVM.playerLiveDataName[0]}" />
+
 
                 <EditText
                     android:id="@+id/editTextNumber1"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:gravity="bottom"
+                    android:layout_weight="1"
                     android:inputType="number"
                     android:text="@{sharedVM.scoreFieldLiveData[0]}"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(0)}"
                     android:src="@android:drawable/ic_menu_camera"
                     tools:ignore="SpeakableTextPresentCheck" />
+
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[1] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#8CE8F1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[1] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName2"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[1]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber2"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text="@{sharedVM.scoreFieldLiveData[1]}"
-                    android:inputType="number" />
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:text="@{sharedVM.scoreFieldLiveData[1]}" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(1)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
@@ -275,29 +278,32 @@
                 android:id="@+id/TR3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[2] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#CDDC39"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[2] ? View.VISIBLE : View.INVISIBLE}">
+
                 <TextView
                     android:id="@+id/TextPersonName3"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[2]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber3"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text="@{sharedVM.scoreFieldLiveData[2]}"
-                    android:inputType="number" />
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:text="@{sharedVM.scoreFieldLiveData[2]}" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(2)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
@@ -306,30 +312,33 @@
                 android:id="@+id/TR4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[3] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#8CE8F1"
+                android:textAlignment="gravity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[3] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName4"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[3]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber4"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text=""
-                    android:inputType="number" />
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:text="" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(3)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
@@ -338,31 +347,33 @@
                 android:id="@+id/TR5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[4] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#CDDC39"
+                android:textAlignment="gravity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[4] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName5"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[4]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber5"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text=""
-
-                    android:inputType="number" />
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:text="" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(4)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
@@ -371,31 +382,34 @@
                 android:id="@+id/TR6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[5] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#8CE8F1"
+                android:textAlignment="gravity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[5] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName6"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[5]}" />
+
 
                 <EditText
                     android:id="@+id/editTextNumber6"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:inputType="number"
+                    android:layout_weight="1"
                     android:text=""
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(5)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
@@ -404,29 +418,32 @@
                 android:id="@+id/TR7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[6] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#CDDC39"
+                android:textAlignment="gravity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="@{sharedVM.playerVisibility[6] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName7"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[6]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber7"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text=""
+                    android:layout_weight="1"
                     android:inputType="number" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(6)}"
                     android:src="@android:drawable/ic_menu_camera"
                     tools:ignore="SpeakableTextPresentCheck" />
@@ -436,31 +453,33 @@
                 android:id="@+id/TR8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[7] ? View.VISIBLE : View.INVISIBLE}"
-                android:textAlignment="gravity">
+                android:background="#8CE8F1"
+                android:textAlignment="gravity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:autoSizeTextType="uniform"
+                android:visibility="@{sharedVM.playerVisibility[7] ? View.VISIBLE : View.INVISIBLE}">
 
                 <TextView
                     android:id="@+id/TextPersonName8"
-                    android:layout_width="151dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:autoSizeTextType="none"
-                    android:gravity="bottom"
-                    android:text="@{sharedVM.playerLiveDataName[7]}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:layout_weight="4"
+                    android:autoSizeTextType="uniform"
+                    android:text="@{sharedVM.playerLiveDataName[7]}" />
 
                 <EditText
                     android:id="@+id/editTextNumber8"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:ems="10"
-                    android:text=""
+                    android:layout_weight="1"
                     android:inputType="number" />
 
                 <ImageButton
                     android:id="@+id/imageButtontr8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#F41212"
                     android:onClick="@{() -> playersFragment.onCameraButtonClicked(7)}"
                     android:src="@android:drawable/ic_menu_camera" />
             </TableRow>
