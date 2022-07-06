@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.delafleur.mxt.MainActivity
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentPlayersBinding
@@ -58,6 +59,8 @@ class PlayersFragment : Fragment() {
         // val checkRoundScored = Observer<String> { pRndo ->  pRnd =
         //     pRndo}
         // sharedViewModel.roundScored .observe(viewLifecycleOwner,checkRoundScored)
+
+
 
     }
 

@@ -13,8 +13,11 @@ import com.delafleur.mxt.CameraUtil.JPGtoRGB888
 import com.delafleur.mxt.CameraUtil.fixMatRotation
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
+import org.opencv.core.Core
 import org.opencv.core.Mat
 import org.opencv.core.Rect
+import org.opencv.core.Size
+import org.opencv.imgproc.Imgproc
 
 
 class SharedViewModel : ViewModel() {
@@ -51,43 +54,8 @@ class SharedViewModel : ViewModel() {
     var playerT: MutableList<Players> = mutableListOf()
 
 
-    fun imageRect (image : ImageProxy,prev: PreviewView) {
-        val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
-        var matCVT = Mat()
-        Utils.bitmapToMat(cvBitmap, matCVT)
-        /*matCVT is converted to BGRA 4 channel color
-        * Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
-        * But Scalar colors are B G R A where A is the transaparency I coded a few colors in
-        * camerautil so I wouldnt forget that
-        * */
-        matCVT = fixMatRotation(matCVT, prev)
 
-        Log.i("SharedViewModel", "MAT size row cols = ${matCVT.rows()},${matCVT.cols()}")
-        Log.i("SharedViewModel","Preview size (w/h) is ${prev.width} by ${prev.height}")
-        val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
-
-
-        _bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
-        var showPoints = "Player " +  " Points "
-        var totPts = 0
-        if (wrkMySubmatDomino.pts.size > 0) {
-            wrkMySubmatDomino.pts.forEach {
-                showPoints += "("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
-                        ") + "
-                Log.i("pts", "$it + $totPts")
-                totPts += (it.x + it.y).toInt()
-            }
-            showPoints = showPoints.substring(0, showPoints.lastIndexOf("+")) +
-                        " = " + totPts.toString()
-        }
-        _totalPoints.postValue(totPts.toString())
-        _displayPts.value = showPoints
-        Log.i("ptsC","points from camera ${displayPts.value}")
-        Log.i("ptsC","current domino button is ${currentRound.value}")
-        Log.i("ptsC","Player index is ${playerIndex.value}")
-    }
-
-    fun setPlayer(strg: String){// actually this is the players index. Will be used when totalling domino.
+    fun setPlayer(strg: String){// this is the players index. Will be used when totalling domino.
         _playerIndex.value =  strg
         Log.i("view","player ${strg}")
     }
@@ -134,10 +102,7 @@ class SharedViewModel : ViewModel() {
             playerT[4].score[domButton],
             playerT[5].score[domButton],
             playerT[6].score[domButton],
-            playerT[7].score[domButton]
-
-        )
-
+            playerT[7].score[domButton])
     }
     fun setPlayerSummaries(){
         val visibilityList = MutableList<Boolean>(8){true}
@@ -169,8 +134,7 @@ class SharedViewModel : ViewModel() {
     }
 
     fun clearProcess(){
-
-        _playerIndex.value = ""
+       _playerIndex.value = ""
         _totalPoints.value = ""
     }
     fun buildPlayersFromCSVrecords(inPut: MutableList<Array<String>>) {
@@ -194,8 +158,6 @@ class SharedViewModel : ViewModel() {
         playerT[playerIndex.value!!.toInt() ].
         score[currentRound.value!!] = totalPoints!!.value.toString()
         refreshScoreLiveData(currentRound.value!!)
-       // _currentRound!!.value = null
-
     }
     fun addScoresToPlayerT(dominoButton :Int,scoresToAdd: Array<String>){
         Log.i("scoresUpdate","current round value ${currentRound.value}")
@@ -211,12 +173,9 @@ class SharedViewModel : ViewModel() {
                if (j.length > 0 && playerT[i].playerName.length > 1) {
                     playerT[i].score[dominoButton] = j}
                 }
-
-            //writeCSV(buildCsvRecordsFromPlayerT()) hold off updating here until they go to summaries
+            writeCSV(buildCsvRecordsFromPlayerT())
             setRoundsScored()
             setPlayerSummaries()
-
-
         }
     }
     fun updatePtablefromPlayerNames(playerNamesArr: Array<String>) {
@@ -228,7 +187,6 @@ class SharedViewModel : ViewModel() {
         playerT.forEach { Log.i("out","PlayerT record ${it.csvRecord().toList().joinToString()}")
             Log.i("updatePtable","PlayerT playerName ${it.playerName}")
         }
-
         writeCSV(buildCsvRecordsFromPlayerT())
         setRoundsScored()
         setPlayerSummaries()
@@ -246,28 +204,61 @@ class SharedViewModel : ViewModel() {
         Log.i("outRec","outRec size is ${outRec.size}")
         return outRec
     }
+    fun imageRect (image : ImageProxy,prev: PreviewView) {
+        val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
+        var matCVT = Mat()
+        Utils.bitmapToMat(cvBitmap, matCVT)
 
+        // Imgproc.resize(matCVT,matCVT, Size(prev.height.toDouble(),
+        //     prev.width.toDouble()) )
+
+        /*matCVT is converted to BGRA 4 channel color
+        * Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
+        * But Scalar colors are B G R A where A is the transaparency I coded a few colors in
+        * camerautil so I wouldnt forget that
+        * */
+        matCVT = fixMatRotation(matCVT, prev)
+        val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
+        _bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
+        var showPoints = "Player " +  " Points "
+        var totPts = 0
+        if (wrkMySubmatDomino.pts.size > 0) {
+            wrkMySubmatDomino.pts.forEach {
+                showPoints += "("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
+                        ") + "
+                Log.i("pts", "$it + $totPts")
+                totPts += (it.x + it.y).toInt()
+            }
+            showPoints = showPoints.substring(0, showPoints.lastIndexOf("+")) +
+                    " = " + totPts.toString()
+        }
+        _totalPoints.postValue(totPts.toString())
+        _displayPts.value = showPoints
+        Log.i("ptsC","points from camera ${displayPts.value}")
+        Log.i("ptsC","current domino button is ${currentRound.value}")
+        Log.i("ptsC","Player index is ${playerIndex.value}")
+    }
     private fun combineImageIntoOne(bitmap: ArrayList<Bitmap>,cWidth: Int,cHeight: Int): Bitmap? {
-        var w = 0
-        var h = 0
         val temp = Bitmap.createBitmap(cWidth, cHeight,Bitmap.Config.ARGB_8888)
         val canvas = Canvas(temp)
         Log.i("HTML","Canvas width height is ${canvas.width}/${canvas.height}")
-        var top = bitmap[0].height
-        var left = 20
+        var top = 5
+        var left = 5
         for (i in bitmap.indices ) {
             canvas.drawBitmap(bitmap[i], left.toFloat(), top.toFloat(), null)
-            if (left > (cWidth - 300) ) {
-                left = 20
-                top  += bitmap[i].height + 20
+            Log.i("drawImg","Drawing $i at ${left}/ ${top}")
+            if (left > (cWidth - 310) ) {
+                left = 5
+                top  += bitmap[i].height + 5
             }
             else
             {
-                left += bitmap[i].width + 30
+                left += bitmap[i].width + 10
             }
         }
         return temp
     }
+
 
 
 }

@@ -28,7 +28,7 @@ fun backupCSV(){
         File(fileI).delete()
 
     }catch (e: IOException){
-        if (checkFile() == "new"){Log.i("backup","no file to backup, created new one")}
+        if (checkFile())Log.i("backup","no file to backup, created new one")
     }
 
 
@@ -50,16 +50,15 @@ fun writeCSV(scoreRecords: MutableList<Array<String>>){
     }
     Log.i("myIO", "Wrote to file via csvWriter" + fileX.absolutePath)
 }
-fun checkFile() :String {
-    var fileck = ""
+fun checkFile() :Boolean {
+    var fileck = false
     try {
         if (File(fileI).createNewFile()) {
             Log.i("File", "File Created")
-            fileck = "new"
-           // writeCSV(initCsvFile())
+            fileck = true
         } else {
             Log.i("File", "$fileI already exists")
-            fileck = "old"
+            fileck = false
         }
     } catch (e: IOException) {
         Log.e("File", "Looks like ${e.message} caused the exception")

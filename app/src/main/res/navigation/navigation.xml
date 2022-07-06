@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/cameracaptureFragment"
         android:name="com.delafleur.mxt.ui.CameracaptureFragment"
-        android:label="CameracaptureFragment">
+        android:label="Take a Picture of the Dominos">
         <action
             android:id="@+id/action_cameracaptureFragment_to_playersFragment"
             app:destination="@id/playersFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/playersFragment"
         android:name="com.delafleur.mxt.ui.PlayersFragment"
-        android:label="PlayersFragment" >
+        android:label="Record Scores for Players">
         <action
             android:id="@+id/action_playersFragment_to_scoresummaryFragment"
             app:destination="@id/scoresummaryFragment" />
@@ -30,8 +30,7 @@
     <fragment
         android:id="@+id/scoresummaryFragment"
         android:name="com.delafleur.mxt.ui.ScoresummaryFragment"
-        android:label="fragment_scoresummary"
-        tools:layout="@layout/fragment_scoresummary" >
+        android:label="MxT Score Summary">
         <action
             android:id="@+id/action_scoresummaryFragment_to_playersFragment"
             app:destination="@id/playersFragment" />
@@ -39,8 +38,8 @@
     <fragment
         android:id="@+id/cameraShowImageFragment"
         android:name="com.delafleur.mxt.ui.CameraShowImageFragment"
-        android:label="fragment_camera_show_image"
-        tools:layout="@layout/fragment_camera_show_image" >
+        android:label="Get the Points"
+        tools:layout="@layout/fragment_camera_show_image">
         <action
             android:id="@+id/action_cameraShowImageFragment_to_playersFragment"
             app:destination="@id/playersFragment" />

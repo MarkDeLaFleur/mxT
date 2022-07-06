@@ -32,12 +32,8 @@ class ScoresummaryFragment : Fragment() {
         }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
+       super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.thenavdrawer,   menu)
-        _binding!!.toolbarMxT.inflateMenu(R.menu.thenavdrawer)
-        binding.toolbarMxT.title = "??"
-        activity?.setTitle("not lookin for a string")
-
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +44,8 @@ class ScoresummaryFragment : Fragment() {
             scoresummaryFragment = this@ScoresummaryFragment
         }
         binding.scoresummaryFragment = this
+
+
         Log.i("readcsv","called from scoresummaryFragment create View")
         if (sharedViewModel.playerT.size == 0 ){
             Log.i("frag","playerT must be empty")
@@ -84,11 +82,12 @@ class ScoresummaryFragment : Fragment() {
     }
 
     fun onNewGameSelected() {
-        /* do something cool like copy the file and delete the old one.
-        * */
         backupCSV()
         sharedViewModel.buildPlayersFromCSVrecords(readCSV())
+        sharedViewModel.setPlayerSummaries()
+        sharedViewModel.clearProcess()
         sharedViewModel.setVisibiltyNewGame()
+
     }
     fun onReturnSelected(){
         /*called from Enter Scores button via onClick="@{() -> scoresummaryFragment.onReturnSelected()}"
