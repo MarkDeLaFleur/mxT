@@ -1,6 +1,7 @@
 package com.delafleur.mxt.ui
 
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -94,7 +95,7 @@ class PlayersFragment : Fragment() {
 
     fun onCameraButtonClicked(playerIndex: Int) {
         Log.i(
-            "player", "player $playerIndex called the camera capture" +
+            "player", "player ${sharedViewModel.playerT[playerIndex].playerName} called the camera capture" +
                     " ${sharedViewModel.currentRound.value}"
         )
         if (sharedViewModel.currentRound.value == null) {
@@ -103,6 +104,7 @@ class PlayersFragment : Fragment() {
             sn.show()
         } else {
             sharedViewModel.setPlayer(playerIndex.toString())
+
             findNavController().navigate((R.id.action_playersFragment_to_cameracaptureFragment))
         }
     }

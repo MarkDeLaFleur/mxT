@@ -14,5 +14,6 @@
     <string name="not_scored">Not Scored</string>
     <string name="enter_10_scores">Enter\nScores</string>
     <string name="new_10_game">New\nGame</string>
+    <string name="mylabel">Player {myplayer}</string>
 
 </resources>

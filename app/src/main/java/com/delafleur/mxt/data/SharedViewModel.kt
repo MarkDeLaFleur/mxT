@@ -136,6 +136,8 @@ class SharedViewModel : ViewModel() {
     fun clearProcess(){
        _playerIndex.value = ""
         _totalPoints.value = ""
+        _currentRound!!.value = null
+        _scoreFieldLiveData.value = mutableListOf("0","0","0","0","0","0","0","0")
     }
     fun buildPlayersFromCSVrecords(inPut: MutableList<Array<String>>) {
         /* Using CSV records from file. First record is a header record but we don't use it.
