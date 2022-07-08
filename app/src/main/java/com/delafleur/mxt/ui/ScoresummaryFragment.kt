@@ -1,11 +1,13 @@
 package com.delafleur.mxt.ui
 
 
+import android.app.Notification
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toolbar
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.view.SupportActionModeWrapper
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -27,13 +29,11 @@ class ScoresummaryFragment : Fragment() {
         savedInstanceState: Bundle?): View? {
         val fragmentBinding = FragmentScoresummaryBinding.inflate(inflater, container, false)
         _binding = fragmentBinding
-        setHasOptionsMenu(true)
-        return fragmentBinding.root
+         return fragmentBinding.root
         }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-       super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.thenavdrawer,   menu)
+               inflater.inflate(R.menu.thenavdrawer,   menu)
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

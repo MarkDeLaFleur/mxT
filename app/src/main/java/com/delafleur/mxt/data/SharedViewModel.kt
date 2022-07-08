@@ -169,6 +169,7 @@ class SharedViewModel : ViewModel() {
             _currentRound.value = dominoButton
         }
         else{
+
             _roundScored.value = "Round " + dominoButton.toString() + " UPDATED -->"
             _currentRound!!.value = null
             scoresToAdd.forEachIndexed { i, j ->

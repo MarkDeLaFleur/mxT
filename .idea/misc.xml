@@ -11,8 +11,10 @@
         <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_players.xml" value="0.1" />
         <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_score.xml" value="0.1" />
         <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_scoresummary.xml" value="0.17475728155339806" />
+        <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_scoring_alternate.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_start.xml" value="0.1890625" />
         <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/fragment_summary_page.xml" value="0.1" />
+        <entry key="..\:/Users/markd/AndroidStudioProjects/MxT/app/src/main/res/layout/scoring_alternate_fragment.xml" value="0.4466666666666667" />
       </map>
     </option>
   </component>
@@ -32,7 +34,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.16666666666666666" />
+        <option name="scale" value="0.4466666666666667" />
       </ProjectState>
     </option>
   </component>

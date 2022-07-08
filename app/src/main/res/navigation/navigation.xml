@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/scoresummaryFragment">
-
     <fragment
         android:id="@+id/cameracaptureFragment"
-        android:name="com.delafleur.mxt.ui.CameracaptureFragment"
-        android:label="Points by Camera">
+        android:name="com.delafleur.mxt.ui.CameracaptureFragment">
         <action
             android:id="@+id/action_cameracaptureFragment_to_playersFragment"
             app:destination="@id/playersFragment" />
@@ -19,13 +17,16 @@
     <fragment
         android:id="@+id/playersFragment"
         android:name="com.delafleur.mxt.ui.PlayersFragment"
-        android:label="Record Scores for Players">
+        android:label="Score Entry">
         <action
             android:id="@+id/action_playersFragment_to_scoresummaryFragment"
-            app:destination="@id/scoresummaryFragment" />
+            app:destination="@id/scoresummaryFragment"
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_playersFragment_to_cameracaptureFragment"
-            app:destination="@id/cameracaptureFragment" />
+            app:destination="@id/cameracaptureFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/scoresummaryFragment"
@@ -33,7 +34,8 @@
         android:label="MxT Score Summary">
         <action
             android:id="@+id/action_scoresummaryFragment_to_playersFragment"
-            app:destination="@id/playersFragment" />
+            app:destination="@id/playersFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/cameraShowImageFragment"
@@ -43,8 +45,5 @@
         <action
             android:id="@+id/action_cameraShowImageFragment_to_playersFragment"
             app:destination="@id/playersFragment" />
-        <argument
-            android:name="player"
-            app:argType="string" />
     </fragment>
 </navigation>

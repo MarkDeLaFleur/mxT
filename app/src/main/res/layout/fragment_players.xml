@@ -32,6 +32,7 @@
             android:textAlignment="textStart"
             android:textSize="14sp"
             android:textStyle="bold|italic"
+            android:textColor="@{sharedVM.roundScored.indexOf(`UPDATED`) > -1 ? @color/Green : @color/Grey}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

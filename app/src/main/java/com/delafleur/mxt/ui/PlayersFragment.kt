@@ -57,7 +57,8 @@ class PlayersFragment : Fragment() {
         sharedViewModel.totalPoints.observe(viewLifecycleOwner, checkCameraPts)
         val checkCameraPlayerindex = Observer<String> { pInd -> plyrInd = pInd }
         sharedViewModel.playerIndex.observe(viewLifecycleOwner, checkCameraPlayerindex)
-        // val checkRoundScored = Observer<String> { pRndo ->  pRnd =
+
+    // val checkRoundScored = Observer<String> { pRndo ->  pRnd =
         //     pRndo}
         // sharedViewModel.roundScored .observe(viewLifecycleOwner,checkRoundScored)
 
@@ -104,7 +105,6 @@ class PlayersFragment : Fragment() {
             sn.show()
         } else {
             sharedViewModel.setPlayer(playerIndex.toString())
-
             findNavController().navigate((R.id.action_playersFragment_to_cameracaptureFragment))
         }
     }
