@@ -8,16 +8,13 @@ import androidx.camera.view.PreviewView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.delafleur.mxt.CameraUtil
-import com.delafleur.mxt.CameraUtil.JPGtoRGB888
-import com.delafleur.mxt.CameraUtil.fixMatRotation
+import com.delafleur.mxt.util.CameraUtil
+import com.delafleur.mxt.util.CameraUtil.JPGtoRGB888
+import com.delafleur.mxt.util.CameraUtil.fixMatRotation
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
-import org.opencv.core.Core
 import org.opencv.core.Mat
-import org.opencv.core.Rect
-import org.opencv.core.Size
-import org.opencv.imgproc.Imgproc
+
 
 
 class SharedViewModel : ViewModel() {
@@ -59,13 +56,13 @@ class SharedViewModel : ViewModel() {
         _playerIndex.value =  strg
         Log.i("view","player ${strg}")
     }
-    fun setVisibiltyNewGame () {_playerVisibility.value = mutableListOf<Boolean>(true,true,true,true,true,
+    fun setVisibiltyNewGame () {_playerVisibility.value = mutableListOf(true,true,true,true,true,
     true,true,true)}
 
     fun setRoundsScored()  {
         // we want to find out which rounds have been scored so we look at each player's score or
         // test score and if the player's score is not "0" then set the flag to true
-        val rsAnyScoreInRound =  Array<Boolean>(13){false}
+        val rsAnyScoreInRound =  Array(13){false}
         var rsF =  "Completed Rounds "
         var rsNf = "Not Completed    "
         // looping through all the players to see if 'any' of the players have a score for a round

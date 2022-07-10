@@ -9,8 +9,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.delafleur.mxt.CameraUtil.checkPermissions
-import com.delafleur.mxt.CameraUtil.userRequestPermissions
+import com.delafleur.mxt.util.CameraUtil.checkPermissions
+import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
 import org.opencv.core.Mat
 
 
@@ -36,7 +36,7 @@ import org.opencv.core.Mat
      }
 
      companion object {
-        init { System.loadLibrary("opencv_java4") }
+      init { System.loadLibrary("opencv_java4") }
     }
 
 }

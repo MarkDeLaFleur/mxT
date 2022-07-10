@@ -1,4 +1,4 @@
-package com.delafleur.mxt
+package com.delafleur.mxt.util
 
 import android.Manifest
 import android.app.Activity
@@ -15,8 +15,9 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.delafleur.mxt.CameraUtil.blobParamsInit
+import com.delafleur.mxt.util.CameraUtil.blobParamsInit
 import com.delafleur.mxt.data.MySubmatDomino
+
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.features2d.SimpleBlobDetector

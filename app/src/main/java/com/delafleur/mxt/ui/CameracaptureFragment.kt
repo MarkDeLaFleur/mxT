@@ -15,9 +15,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.ActionBar
-import com.delafleur.mxt.CameraUtil
-import com.delafleur.mxt.CameraUtil.checkPermissions
-import com.delafleur.mxt.CameraUtil.userRequestPermissions
+import com.delafleur.mxt.util.CameraUtil
+import com.delafleur.mxt.util.CameraUtil.checkPermissions
+import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentCameracaptureBinding

@@ -1,15 +1,10 @@
 package com.delafleur.mxt.util
 
-
 import android.os.Environment
 import android.util.Log
-import com.delafleur.mxt.data.Players
 import com.opencsv.CSVReader
 import com.opencsv.CSVWriter
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.IOException
+import java.io.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -18,7 +13,7 @@ val fileI = File(
     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
     fileName).absolutePath  // note this is actually returning a full pathname as a string
 val fileX = File(fileI)
-
+val fileSamsung = File("sdcard/Download/"+ fileName)
 fun backupCSV(){
     val fileNameOut = "dominoS" + DateTimeFormatter.ofPattern("yyyyLLLLddhhmmss").format(LocalDateTime.now()) + ".csv"
     val fileO = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),fileNameOut).absolutePath
@@ -70,8 +65,8 @@ fun checkFile() :Boolean {
 fun readCSV() : MutableList<Array<String>> {
         var csvReaderData = mutableListOf<Array<String>>()
         try{
-            Log.i("myIO","reading csvFile fileX")
-            csvReaderData = CSVReader(FileReader(fileX)).readAll()
+            Log.i("myIO","reading csvFile ${fileSamsung}")
+            csvReaderData = CSVReader(FileReader(fileSamsung)).readAll()
             if (csvReaderData.size == 0){
                 Log.i("myIO","File was created loading playerT from initfile")
                 return initCsvFile()
