@@ -56,13 +56,17 @@ class CameracaptureFragment : Fragment() {
             cameraController.previewTargetSize = CameraController.OutputSize(Size(700,900))
             cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
-            cameraController.imageCaptureTargetSize = CameraController.OutputSize(Size(700,900))
+            cameraController.setImageCaptureFlashMode(1)
+//            cameraController.imageCaptureTargetSize = CameraController.OutputSize(Size(700,900))
+
+            cameraController.imageCaptureTargetSize = CameraController.OutputSize(1)
+
             cameraController.bindToLifecycle(viewLifecycleOwner)
-            preview = view.findViewById<PreviewView>(R.id.viewPreview)
-            preview.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+            preview = view.findViewById(R.id.viewPreview)
+            Log.i("log","implementation is ${preview.implementationMode}")
             preview.controller = cameraController
             Log.i("log", "rotation is ${preview.rotation}")
-            Log.i("log","${cameraController.imageCaptureTargetSize} is image capture target size")
+            Log.i("log","target size ${cameraController.imageCaptureTargetSize} is image capture target size")
             binding?.apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = sharedViewModel
@@ -76,6 +80,7 @@ class CameracaptureFragment : Fragment() {
            activity?.runOnUiThread(action)
         }
         fun takePhoto() {
+           // cameraController.imageCaptureFlashMode=1
             cameraController.takePicture(
                 ContextCompat.getMainExecutor(binding.root.context),
                 object: ImageCapture.OnImageCapturedCallback() {

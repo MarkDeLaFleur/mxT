@@ -40,7 +40,8 @@ object CameraUtil {
     class CameraApplication: Application(),CameraXConfig.Provider {
         override fun getCameraXConfig(): CameraXConfig {
             return CameraXConfig.Builder.fromConfig(Camera2Config.defaultConfig())
-                .setMinimumLoggingLevel(Log.INFO).build()
+                .setMinimumLoggingLevel(Log.WARN)
+                .build()
         }
     }
     /*commented out because this is for imageproxy from analysis and I'm using capture use case
@@ -173,16 +174,18 @@ object CameraUtil {
             peri = Imgproc.arcLength(contour2f, true)
             Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
             rectWrk = Imgproc.boundingRect(poly)
+
+            Log.i("rect","rect Area = ${rectWrk.area()}")
             if ((rectWrk.width < rectWrk.height && rectWrk.width > 90) ||
-                (rectWrk.height < rectWrk.width && rectWrk.height > 90)
-            ) {
-                wrkMat = Mat(imgIn, rectWrk)
-                if (wrkMat.height() < wrkMat.width())
-                    Core.rotate(wrkMat, wrkMat, Core.ROTATE_90_CLOCKWISE)
-                Imgproc.resize(wrkMat, wrkMat, Size(100.0, 200.0))
-                wrkPts = PointsfromCroppedImage(wrkMat)
-                ptsOutList.add(wrkPts)
-                dominoMats.add(putNumbersOnCrops(wrkMat, wrkPts))
+                (rectWrk.height < rectWrk.width && rectWrk.height > 90)) {
+                    wrkMat = Mat(imgIn, rectWrk)
+                    if (wrkMat.height() < wrkMat.width())
+                        Core.rotate(wrkMat, wrkMat, Core.ROTATE_90_CLOCKWISE)
+                  // Imgproc.resize(wrkMat, wrkMat, Size(150.0, 300.0))
+                   // Imgproc.resize(wrkMat,wrkMat,Size((wrkMat.width()+0.0),(wrkMat.width())*2+20.0))
+                    wrkPts = PointsfromCroppedImage(wrkMat)
+                    ptsOutList.add(wrkPts)
+                    dominoMats.add(putNumbersOnCrops(wrkMat, wrkPts))
             }
         }   //end of contours and build of cropped Dominos
         //tried sorting in various ways but seem to always get the same results....
@@ -219,8 +222,14 @@ object CameraUtil {
     }
 
 
-    fun putNumbersOnCrops(wrkMat: Mat, ptsIn :Point): Mat{
+    fun putNumbersOnCrops(wrkMat: Mat, ptsIn :Point): Mat {
         val grey = Mat()
+        Log.i("numbersonDomino","wrkMat size is ${wrkMat.width()}" +
+                "/${wrkMat.height()}")
+        //double width and height here for some devices and half for others
+        //Imgproc.resize(wrkMat,wrkMat,Size(wrkMat.width()*2.0,wrkMat.height()*2.0))
+        Imgproc.resize(wrkMat,wrkMat,Size(wrkMat.width()*.33,wrkMat.height()*.33))
+
         Imgproc.cvtColor(wrkMat, grey,Imgproc.COLOR_BGR2GRAY)
         Log.i("putText","Domino width / height ${grey.cols()}/${grey.rows()}")
         val mu  = Imgproc.moments(grey,true)
@@ -235,8 +244,8 @@ object CameraUtil {
         Imgproc.putText(wrkMat,ptsIn.y.toInt().toString(),
                    centerL, Imgproc.FONT_HERSHEY_SIMPLEX,2.0, colorBlue2,
             4,1,false)
+        //Imgproc.resize(wrkMat,wrkMat,Size(100.0,200.0))
         return wrkMat
-
     }
 
 }

@@ -247,13 +247,13 @@ class SharedViewModel : ViewModel() {
         for (i in bitmap.indices ) {
             canvas.drawBitmap(bitmap[i], left.toFloat(), top.toFloat(), null)
             Log.i("drawImg","Drawing $i at ${left}/ ${top}")
-            if (left > (cWidth - 310) ) {
+            if (left > (cWidth - 400) ) {
                 left = 5
-                top  += bitmap[i].height + 5
+                top  += bitmap[i].height + 25
             }
             else
             {
-                left += bitmap[i].width + 10
+                left += bitmap[i].width + 25
             }
         }
         return temp

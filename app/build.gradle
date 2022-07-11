@@ -45,14 +45,23 @@ android {
             }
         }
     }
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'junit:junit:4.13.2'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    def nav_version = "2.5.0"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+
+    // OPENCV
+    // note be sure to make this 4.5.3.0 because otherwise you get some really weird errros
+    // when running this on the lenovo tab11.
+    implementation 'com.quickbirdstudios:opencv:4.5.3.0'
+
     // CameraX
     def camerax_version = "1.2.0-alpha03"
     implementation "androidx.camera:camera-core:${camerax_version}"
@@ -63,7 +72,7 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
 
-    // Java language implementation
+    def nav_version = "2.5.0"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
 
@@ -76,15 +85,14 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-
-    // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
+
+    // Jetpack Compose Integration
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.quickbirdstudios:opencv:4.5.3'
     implementation 'com.opencsv:opencsv:5.6'
     implementation 'androidx.navigation:navigation-common:2.5.0'
     testImplementation 'junit:junit:4.13.2'

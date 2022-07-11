@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.delafleur.mxt.util.CameraUtil.checkPermissions
 import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
+import org.opencv.android.OpenCVLoader
 import org.opencv.core.Mat
 
 
@@ -18,6 +19,8 @@ import org.opencv.core.Mat
      private lateinit var navController: NavController
      override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
+         if (!OpenCVLoader.initDebug()) Log.e("OpenCV", "Unable to load OpenCV!")
+         else   Log.d("OpenCV", "OpenCV loaded Successfully!");
 
          if(!checkPermissions(this)) userRequestPermissions((this))
 
@@ -35,8 +38,8 @@ import org.opencv.core.Mat
          return navController.navigateUp() || super.onSupportNavigateUp()
      }
 
-     companion object {
-      init { System.loadLibrary("opencv_java4") }
-    }
+ //    companion object {
+ //     init { System.loadLibrary("opencv_java4") }
+ //   }
 
 }
