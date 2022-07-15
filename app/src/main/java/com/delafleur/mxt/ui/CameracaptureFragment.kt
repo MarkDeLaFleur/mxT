@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.ActionBar
+import androidx.camera.video.QualitySelector.getResolution
 import com.delafleur.mxt.util.CameraUtil
 import com.delafleur.mxt.util.CameraUtil.checkPermissions
 import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
@@ -53,14 +54,11 @@ class CameracaptureFragment : Fragment() {
             super.onViewCreated(view, savedInstanceState)
             val xcfg = CameraUtil.CameraApplication()
             Log.i("log","${xcfg.cameraXConfig.minimumLoggingLevel} is minimum logging level")
-            cameraController.previewTargetSize = CameraController.OutputSize(Size(700,900))
             cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
+            cameraController.imageCaptureFlashMode = ImageCapture.FLASH_MODE_AUTO
             cameraController.setImageCaptureFlashMode(1)
-//            cameraController.imageCaptureTargetSize = CameraController.OutputSize(Size(700,900))
-
             cameraController.imageCaptureTargetSize = CameraController.OutputSize(1)
-
             cameraController.bindToLifecycle(viewLifecycleOwner)
             preview = view.findViewById(R.id.viewPreview)
             Log.i("log","implementation is ${preview.implementationMode}")

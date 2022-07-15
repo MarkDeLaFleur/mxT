@@ -20,6 +20,7 @@ import com.delafleur.mxt.data.MySubmatDomino
 
 import org.opencv.android.Utils
 import org.opencv.core.*
+import org.opencv.core.Core.bitwise_not
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
@@ -169,32 +170,33 @@ object CameraUtil {
         Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
         Imgproc.findContours(thresh,contours,Mat(), Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE)
-        contours.forEach { it ->
+        contours.forEach {
             it.convertTo(contour2f, CvType.CV_32FC2)
             peri = Imgproc.arcLength(contour2f, true)
             Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
             rectWrk = Imgproc.boundingRect(poly)
-
-            Log.i("rect","rect Area = ${rectWrk.area()}")
-            if ((rectWrk.width < rectWrk.height && rectWrk.width > 90) ||
-                (rectWrk.height < rectWrk.width && rectWrk.height > 90)) {
-                    wrkMat = Mat(imgIn, rectWrk)
-                    if (wrkMat.height() < wrkMat.width())
-                        Core.rotate(wrkMat, wrkMat, Core.ROTATE_90_CLOCKWISE)
-                  // Imgproc.resize(wrkMat, wrkMat, Size(150.0, 300.0))
-                   // Imgproc.resize(wrkMat,wrkMat,Size((wrkMat.width()+0.0),(wrkMat.width())*2+20.0))
-                    wrkPts = PointsfromCroppedImage(wrkMat)
-                    ptsOutList.add(wrkPts)
-                    dominoMats.add(putNumbersOnCrops(wrkMat, wrkPts))
+            wrkMat = Mat(imgIn, rectWrk)
+            if (wrkMat.rows() < wrkMat.cols()) Core.rotate(wrkMat, wrkMat, Core.ROTATE_90_CLOCKWISE)
+            if (wrkMat.rows() - wrkMat.cols() > 10) {
+                Log.i(
+                    "wrkMat", "wrkMat rows / cols --> ${wrkMat.rows()}/${wrkMat.cols()}" +
+                            " wrkMat rows - cols ${wrkMat.rows() - wrkMat.cols()}"
+                )
+                dominoMats.add(wrkMat)
             }
-        }   //end of contours and build of cropped Dominos
-        //tried sorting in various ways but seem to always get the same results....
-       // dominoMats.sortedWith(compareBy { (it.width()+it.height())/2 })
-        dominoMats.forEach {
-            val wrkBitmap = Bitmap.createBitmap(it.cols(), it.rows(), Bitmap.Config.ARGB_8888)
-            Utils.matToBitmap(it, wrkBitmap)
-            dominoBitmaps.add(wrkBitmap)
         }
+                dominoMats.sortBy { it.rows() }
+                dominoMats.sortByDescending { it.cols() }
+
+                dominoMats.forEach {
+                    Imgproc.resize(it,it,Size(50.0,100.0))
+                    wrkPts = PointsfromCroppedImage(it)
+                    ptsOutList.add(wrkPts)
+                    val tempIt = putNumbersOnCrops(it, wrkPts)
+                    val wrkBitmap = Bitmap.createBitmap(it.cols(), it.rows(), Bitmap.Config.ARGB_8888)
+                    Utils.matToBitmap(tempIt, wrkBitmap)
+                    dominoBitmaps.add(wrkBitmap)
+                }
         Log.i("bitmaps","passing ${dominoBitmaps.size} back from dominoArrayofMat method")
         return  MySubmatDomino(pts = ptsOutList,bitmapImgs = dominoBitmaps)
     }
@@ -210,42 +212,43 @@ object CameraUtil {
             0, sCol)).toList().size).toDouble()
         ptsOut.y = (keypointDetector(cropImage.submat(sRow/2,
             sRow,0,sCol)).toList().size).toDouble()
-
-       //ptsOut.x = (keypointDetector(cropImage.submat(0, 150, 0, 150)).toList().size).toDouble()
-       //ptsOut.y  = (keypointDetector(cropImage.submat(150, 300, 0, 150)).toList().size).toDouble()
-
         return ptsOut
     }
-    fun Fragment.runOnUiThread(action: () -> Unit) {
-       if (!isAdded) return
-       activity?.runOnUiThread(action)
-    }
-
-
-    fun putNumbersOnCrops(wrkMat: Mat, ptsIn :Point): Mat {
+     fun putNumbersOnCrops(wrkM: Mat, ptsIn :Point): Mat {
         val grey = Mat()
-        Log.i("numbersonDomino","wrkMat size is ${wrkMat.width()}" +
-                "/${wrkMat.height()}")
-        //double width and height here for some devices and half for others
-        //Imgproc.resize(wrkMat,wrkMat,Size(wrkMat.width()*2.0,wrkMat.height()*2.0))
-        Imgproc.resize(wrkMat,wrkMat,Size(wrkMat.width()*.33,wrkMat.height()*.33))
+        Log.i("numbersonDomino","wrkMat size is ${wrkM.width()}" +
+                "/${wrkM.height()}")
+         Log.i("numbersonDomino","image rows / cols /width/height ${wrkM.rows()}" +
+                 " ${wrkM.cols()} ${wrkM.width()} ${wrkM.height()}")
+        //middle is cols / 2 rows /2
+        //Imgproc.cvtColor(wrkM, grey,Imgproc.COLOR_BGR2GRAY)
+      //  val center = Point(0.0,0.0)
+      //  center.x = (mu.m10 / mu.m00)
+      //  center.y = (mu.m01 /mu.m00)
+      //  val centerH = Point((center.x - center.x/2) , (center.y - center.y/2))
+       // val centerL = Point((center.x - center.x/2), (center.y + center.y))
+     Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
+       Point(10.0,40.0),
+         Imgproc.FONT_HERSHEY_SIMPLEX,
+         1.0, colorGreen,2,1,false)
 
-        Imgproc.cvtColor(wrkMat, grey,Imgproc.COLOR_BGR2GRAY)
-        Log.i("putText","Domino width / height ${grey.cols()}/${grey.rows()}")
-        val mu  = Imgproc.moments(grey,true)
-        val center = Point(0.0,0.0)
-        center.x = (mu.m10 / mu.m00)
-        center.y = (mu.m01 /mu.m00)
-        val centerH = Point((center.x - 25.0) , (center.y - 40.0))
-        val centerL = Point((center.x - 25.0), (center.y + 80.0))
-        Imgproc.putText(wrkMat,ptsIn.x.toInt().toString(),
-                   centerH, Imgproc.FONT_HERSHEY_SIMPLEX,2.0, colorBlue2,
-            4,1,false)
-        Imgproc.putText(wrkMat,ptsIn.y.toInt().toString(),
-                   centerL, Imgproc.FONT_HERSHEY_SIMPLEX,2.0, colorBlue2,
-            4,1,false)
-        //Imgproc.resize(wrkMat,wrkMat,Size(100.0,200.0))
-        return wrkMat
+         Imgproc.putText(wrkM,ptsIn.y.toInt().toString(),
+             Point(10.0,80.0),
+             Imgproc.FONT_HERSHEY_SIMPLEX,
+             1.0, colorRed,2,1,false)
+
+         /*   Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
+                       centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorGreen,
+                2,1,false)
+            Imgproc.putText(wrkM,ptsIn.y.toInt().toString(),
+                       centerL, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorRed,
+                2,1,false)
+         */
+        return wrkM
+    }
+    fun Fragment.runOnUiThread(action: () -> Unit) {
+        if (!isAdded) return
+        activity?.runOnUiThread(action)
     }
 
 }
