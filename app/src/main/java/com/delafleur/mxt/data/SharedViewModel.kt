@@ -13,8 +13,10 @@ import com.delafleur.mxt.util.CameraUtil.JPGtoRGB888
 import com.delafleur.mxt.util.CameraUtil.fixMatRotation
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
+import org.opencv.core.CvType.CV_8UC3
 import org.opencv.core.Mat
-
+import org.opencv.core.Size
+import org.opencv.imgproc.Imgproc
 
 
 class SharedViewModel : ViewModel() {
@@ -208,18 +210,11 @@ class SharedViewModel : ViewModel() {
         val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
         var matCVT = Mat()
         Utils.bitmapToMat(cvBitmap, matCVT)
-
-        // Imgproc.resize(matCVT,matCVT, Size(prev.height.toDouble(),
-        //     prev.width.toDouble()) )
-
-        /*matCVT is converted to BGRA 4 channel color
-        * Imgproc.cvtColor(matCVT,matCVT,Imgproc.COLOR_BGRA2RGB) will convert it to RGB 3 channel
-        * But Scalar colors are B G R A where A is the transaparency I coded a few colors in
-        * camerautil so I wouldnt forget that
-        * */
         matCVT = fixMatRotation(matCVT, prev)
+        Imgproc.resize(matCVT,matCVT,Size(600.0,900.0))
         val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
-        _bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
+        _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
+        //_bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
         var showPoints = "Player " +  " Points "
         var totPts = 0
         if (wrkMySubmatDomino.pts.size > 0) {

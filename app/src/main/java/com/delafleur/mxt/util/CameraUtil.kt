@@ -24,6 +24,7 @@ import org.opencv.core.Core.bitwise_not
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Moments
 import java.nio.ByteBuffer
 
 
@@ -67,6 +68,7 @@ object CameraUtil {
     */
     fun fixMatRotation(matOrg: Mat, previewView: PreviewView?): Mat {
         val mat : Mat
+
         when (previewView?.display?.rotation) {
             Surface.ROTATION_0 -> {
                 mat = Mat(matOrg.cols(), matOrg.rows(), matOrg.type())
@@ -112,18 +114,18 @@ object CameraUtil {
         blobParms._filterByCircularity = false
         blobParms._filterByColor = true
         blobParms._filterByConvexity = true
-        blobParms._filterByInertia = true
-        blobParms._maxArea = 5000.0F
+        blobParms._filterByInertia =   true
+        blobParms._maxArea =  5000.0F
         blobParms._maxConvexity = 3.4028234663852886e+38F
         blobParms._minCircularity = 0.800000011920929F
         blobParms._maxInertiaRatio = 3.4028234663852886e+38F
-        blobParms._minArea = 25F
+        blobParms._minArea = 20F
         blobParms._minConvexity = 0.800000011920929F
-        blobParms._minDistBetweenBlobs =  10.0F
+        blobParms._minDistBetweenBlobs = 05.0F
         blobParms._minInertiaRatio = 0.10000000149011612F
         blobParms._minRepeatability = 2
-        blobParms._maxThreshold = 200.0F
-        blobParms._minThreshold = 100.0F
+        blobParms._maxThreshold = 255.0F
+        blobParms._minThreshold = 155.0F
         blobParms._thresholdStep = 10.0F
         return blobParms
     }
@@ -164,49 +166,75 @@ object CameraUtil {
         val poly = MatOfPoint2f()
         var rectWrk :Rect
         var wrkMat :Mat
-        var wrkPts :Point
         val ptsOutList = ArrayList<Point>()
         val dominoMats = ArrayList<Mat>()
+
         Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
         Imgproc.findContours(thresh,contours,Mat(), Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE)
+
         contours.forEach {
             it.convertTo(contour2f, CvType.CV_32FC2)
             peri = Imgproc.arcLength(contour2f, true)
             Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
             rectWrk = Imgproc.boundingRect(poly)
             wrkMat = Mat(imgIn, rectWrk)
-            if (wrkMat.rows() < wrkMat.cols()) Core.rotate(wrkMat, wrkMat, Core.ROTATE_90_CLOCKWISE)
-            if (wrkMat.rows() - wrkMat.cols() > 10) {
-                Log.i(
-                    "wrkMat", "wrkMat rows / cols --> ${wrkMat.rows()}/${wrkMat.cols()}" +
-                            " wrkMat rows - cols ${wrkMat.rows() - wrkMat.cols()}"
-                )
+            val chkPts = PointsfromCroppedImage(wrkMat)
+            if (chkPts.x + chkPts.y > 0) {
+                ptsOutList.add(chkPts)
+                // take the rectWrk.tl and add a few rows
+                val ff = Point(rectWrk.tl().x+30,rectWrk.tl().y+10)
+                Imgproc.rectangle(imgIn, rectWrk.tl(),rectWrk.br(), colorRed, 2,Imgproc.LINE_4 )
+                Imgproc.putText(imgIn,ptsOutList.size.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
+                0.8, colorBlack,2)
+                //org.opencv.features2d.Features2d.drawKeypoints(imgIn,chkPts,imgIn,
+                //    colorBlue,4)
                 dominoMats.add(wrkMat)
             }
         }
-                dominoMats.sortBy { it.rows() }
+            /*dominoMats.add(imgIn)
+            dominoMats.sortBy { it.rows() }
                 dominoMats.sortByDescending { it.cols() }
 
                 dominoMats.forEach {
-                    Imgproc.resize(it,it,Size(50.0,100.0))
+
+                 //   Imgproc.resize(it,it,Size(50.0,100.0))
                     wrkPts = PointsfromCroppedImage(it)
-                    ptsOutList.add(wrkPts)
-                    val tempIt = putNumbersOnCrops(it, wrkPts)
-                    val wrkBitmap = Bitmap.createBitmap(it.cols(), it.rows(), Bitmap.Config.ARGB_8888)
-                    Utils.matToBitmap(tempIt, wrkBitmap)
-                    dominoBitmaps.add(wrkBitmap)
+                    val z = wrkPts.x + wrkPts.y
+                    if (z > 2) {
+                        Log.i("Points"," rows cols ${wrkPts} ${it.rows()} ${it.cols()}")
+                        ptsOutList.add(wrkPts)
+                        val tempIt = putNumbersOnCrops(it, wrkPts)
+                        val wrkBitmap =
+                            Bitmap.createBitmap(it.cols(), it.rows(), Bitmap.Config.ARGB_8888)
+                        Utils.matToBitmap(tempIt, wrkBitmap)
+                        dominoBitmaps.add(wrkBitmap)
+                    }
                 }
+*/
+        val wrkBitmap = Bitmap.createBitmap(imgIn.cols(),imgIn.rows(),Bitmap.Config.ARGB_8888)
+        Utils.matToBitmap(imgIn,wrkBitmap)
+        dominoBitmaps.add(wrkBitmap)
+
+
+
         Log.i("bitmaps","passing ${dominoBitmaps.size} back from dominoArrayofMat method")
         return  MySubmatDomino(pts = ptsOutList,bitmapImgs = dominoBitmaps)
     }
 
     fun PointsfromCroppedImage(cropImage: Mat) :Point{
-       val ptsOut = Point(0.0,0.0)
+        val ptsOut = Point(0.0,0.0)
+        if (cropImage.rows() < 20) {
+            return ptsOut
+        }
+        Log.i("ptsD", "cropImage rows >  20")
+
+        if (cropImage.rows() < cropImage.cols()) Core.rotate(
+            cropImage,cropImage,Core.ROTATE_90_CLOCKWISE)
+
         val sRow = cropImage.rows()
         val sCol = cropImage.cols()
 
-        Log.i("ptsD","crop row,col ${sRow},${sCol}")
         ptsOut.x = (keypointDetector(cropImage.submat(0,
             sRow/2,
             0, sCol)).toList().size).toDouble()
@@ -222,20 +250,20 @@ object CameraUtil {
                  " ${wrkM.cols()} ${wrkM.width()} ${wrkM.height()}")
         //middle is cols / 2 rows /2
         //Imgproc.cvtColor(wrkM, grey,Imgproc.COLOR_BGR2GRAY)
-      //  val center = Point(0.0,0.0)
-      //  center.x = (mu.m10 / mu.m00)
-      //  center.y = (mu.m01 /mu.m00)
-      //  val centerH = Point((center.x - center.x/2) , (center.y - center.y/2))
+         //  val center = Point(0.0,0.0)
+         //  center.x = (mu.m10 / mu.m00)
+         //  center.y = (mu.m01 /mu.m00)
+         //  val centerH = Point((center.x - center.x/2) , (center.y - center.y/2))
        // val centerL = Point((center.x - center.x/2), (center.y + center.y))
      Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
        Point(10.0,40.0),
          Imgproc.FONT_HERSHEY_SIMPLEX,
-         1.0, colorGreen,2,1,false)
+         1.0, colorRed,2,1,false)
 
          Imgproc.putText(wrkM,ptsIn.y.toInt().toString(),
              Point(10.0,80.0),
              Imgproc.FONT_HERSHEY_SIMPLEX,
-             1.0, colorRed,2,1,false)
+             1.0, colorBlack,2,1,false)
 
          /*   Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
                        centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorGreen,
@@ -250,5 +278,4 @@ object CameraUtil {
         if (!isAdded) return
         activity?.runOnUiThread(action)
     }
-
-}
+    }

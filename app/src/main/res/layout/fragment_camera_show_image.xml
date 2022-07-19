@@ -24,10 +24,10 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="407dp"
-                android:layout_height="665dp"
+                android:layout_width="405dp"
+                android:layout_height="606dp"
                 android:contentDescription="@string/capturedimage"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,20 +36,21 @@
 
             <Button
                 android:id="@+id/process"
-                android:layout_width="169dp"
-                android:layout_height="70dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:onClick="@{() -> camerashowimageFragment.onClickProcess()}"
                 android:text="PROCESS"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.433"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.94" />
+                app:layout_constraintVertical_bias="0.779" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:autoSizeTextType="uniform"
@@ -58,10 +59,10 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.826" />
+                app:layout_constraintTop_toBottomOf="@id/imageView"
+                app:layout_constraintVertical_bias="0.977" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

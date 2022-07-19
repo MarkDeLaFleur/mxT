@@ -1,6 +1,8 @@
 package com.delafleur.mxt.ui
 
 
+import android.annotation.SuppressLint
+import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
@@ -15,7 +17,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.ActionBar
+import androidx.camera.camera2.internal.compat.workaround.TargetAspectRatio
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.QualitySelector.getResolution
+import androidx.compose.runtime.Composable
 import com.delafleur.mxt.util.CameraUtil
 import com.delafleur.mxt.util.CameraUtil.checkPermissions
 import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
@@ -50,21 +55,25 @@ class CameracaptureFragment : Fragment() {
 
         }
 
+        @SuppressLint("RestrictedApi")
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            val xcfg = CameraUtil.CameraApplication()
-            Log.i("log","${xcfg.cameraXConfig.minimumLoggingLevel} is minimum logging level")
+            preview = view.findViewById(R.id.viewPreview)
             cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
-            cameraController.imageCaptureFlashMode = ImageCapture.FLASH_MODE_AUTO
             cameraController.setImageCaptureFlashMode(1)
-            cameraController.imageCaptureTargetSize = CameraController.OutputSize(1)
+            cameraController.imageCaptureFlashMode = ImageCapture.FLASH_MODE_AUTO
+
+            cameraController.imageCaptureTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
+            cameraController.previewTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
+
             cameraController.bindToLifecycle(viewLifecycleOwner)
-            preview = view.findViewById(R.id.viewPreview)
-            Log.i("log","implementation is ${preview.implementationMode}")
             preview.controller = cameraController
+            Log.i("log","preview w/h ${preview.width}/${preview.height}")
             Log.i("log", "rotation is ${preview.rotation}")
-            Log.i("log","target size ${cameraController.imageCaptureTargetSize} is image capture target size")
+            Log.i("log","implementation is ${preview.implementationMode}")
+            Log.i("log","Image capture target size ${cameraController.imageCaptureTargetSize} ")
+            Log.i("log","preview target size ${cameraController.previewTargetSize}")
             binding?.apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = sharedViewModel
