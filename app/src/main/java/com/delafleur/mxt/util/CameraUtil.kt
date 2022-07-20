@@ -35,6 +35,7 @@ val colorBlue = Scalar(0.0,0.0,255.0,255.0)
 val colorBlue2 = Scalar(155.0,0.0,0.0,255.0)
 val colorGreen = Scalar(0.0,255.0,0.0,255.0)
 val colorBlack = Scalar(50.0,50.0,0.0,255.0)
+val colorYellow = Scalar(255.0,180.0,0.0,255.0)
 val colorWhite = Scalar(0.0,0.0,0.0,255.0)
 private val blobparms = blobParamsInit()
 private val detector: SimpleBlobDetector = SimpleBlobDetector.create(blobparms)
@@ -110,8 +111,8 @@ object CameraUtil {
     }
     fun blobParamsInit ():SimpleBlobDetector_Params{
         val blobParms = SimpleBlobDetector_Params()
-        blobParms._filterByArea = true
-        blobParms._filterByCircularity = false
+        blobParms._filterByArea = false //true
+        blobParms._filterByCircularity = true
         blobParms._filterByColor = true
         blobParms._filterByConvexity = true
         blobParms._filterByInertia =   true
@@ -125,7 +126,7 @@ object CameraUtil {
         blobParms._minInertiaRatio = 0.10000000149011612F
         blobParms._minRepeatability = 2
         blobParms._maxThreshold = 255.0F
-        blobParms._minThreshold = 155.0F
+        blobParms._minThreshold = 135.0F
         blobParms._thresholdStep = 10.0F
         return blobParms
     }
@@ -183,10 +184,10 @@ object CameraUtil {
             if (chkPts.x + chkPts.y > 0) {
                 ptsOutList.add(chkPts)
                 // take the rectWrk.tl and add a few rows
-                val ff = Point(rectWrk.tl().x+30,rectWrk.tl().y+10)
-                Imgproc.rectangle(imgIn, rectWrk.tl(),rectWrk.br(), colorRed, 2,Imgproc.LINE_4 )
+                val ff = Point(rectWrk.tl().x+30,rectWrk.tl().y+30)
+                Imgproc.rectangle(imgIn, rectWrk.tl(),rectWrk.br(), colorGreen, 2,Imgproc.LINE_8 )
                 Imgproc.putText(imgIn,ptsOutList.size.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
-                0.8, colorBlack,2)
+                1.2, colorRed,2)
                 //org.opencv.features2d.Features2d.drawKeypoints(imgIn,chkPts,imgIn,
                 //    colorBlue,4)
                 dominoMats.add(wrkMat)

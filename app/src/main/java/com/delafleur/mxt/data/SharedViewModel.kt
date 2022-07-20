@@ -157,7 +157,7 @@ class SharedViewModel : ViewModel() {
         Log.i("ptsP","current domino button is ${currentRound.value}")
         Log.i("ptsP","Player index is ${playerIndex.value}")
         playerT[playerIndex.value!!.toInt() ].
-        score[currentRound.value!!] = totalPoints!!.value.toString()
+            score[currentRound.value!!] = totalPoints!!.value.toString()
         refreshScoreLiveData(currentRound.value!!)
     }
     fun addScoresToPlayerT(dominoButton :Int,scoresToAdd: Array<String>){
@@ -215,12 +215,13 @@ class SharedViewModel : ViewModel() {
         val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
         _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
         //_bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
-        var showPoints = "Player " +  " Points "
+
+        var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "
         var totPts = 0
         if (wrkMySubmatDomino.pts.size > 0) {
-            wrkMySubmatDomino.pts.forEach {
-                showPoints += "("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
-                        ") + "
+            wrkMySubmatDomino.pts.forEachIndexed {inX, it ->
+                showPoints += (inX+1).toString()+"--("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
+                        ") "
                 Log.i("pts", "$it + $totPts")
                 totPts += (it.x + it.y).toInt()
             }
@@ -229,9 +230,6 @@ class SharedViewModel : ViewModel() {
         }
         _totalPoints.postValue(totPts.toString())
         _displayPts.value = showPoints
-        Log.i("ptsC","points from camera ${displayPts.value}")
-        Log.i("ptsC","current domino button is ${currentRound.value}")
-        Log.i("ptsC","Player index is ${playerIndex.value}")
     }
     private fun combineImageIntoOne(bitmap: ArrayList<Bitmap>,cWidth: Int,cHeight: Int): Bitmap? {
         val temp = Bitmap.createBitmap(cWidth, cHeight,Bitmap.Config.ARGB_8888)
