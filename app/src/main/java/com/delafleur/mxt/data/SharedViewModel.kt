@@ -212,7 +212,7 @@ class SharedViewModel : ViewModel() {
         var matCVT = Mat()
         Utils.bitmapToMat(cvBitmap, matCVT)
         matCVT = fixMatRotation(matCVT, prev)
-        Imgproc.resize(matCVT,matCVT,Size(700.0,900.0))
+        Imgproc.resize(matCVT,matCVT,Size(960.0,1280.0)    )  //(700.0,900.0))
         val wrkMySubmatDomino = blobs(matCVT)
         _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
         var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "
