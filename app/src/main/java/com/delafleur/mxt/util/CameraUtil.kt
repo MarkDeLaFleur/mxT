@@ -140,46 +140,44 @@ object CameraUtil {
     }
     fun blobs(image: Mat):MySubmatDomino {
         val arrayOfKeyPts = keypointDetector(image)
+        val listOfKeyPts  = arrayOfKeyPts.toList()
+        listOfKeyPts.sortBy { it.pt.y }
+        listOfKeyPts.sortBy { it.pt.x }
         Features2d.drawKeypoints(
             image, arrayOfKeyPts, image,colorYellow,
             Features2d.DrawMatchesFlags_DEFAULT)
-        arrayOfKeyPts.toList().sortBy { it.pt.y }
-        arrayOfKeyPts.toList().sortBy { it.pt.x }
         val arrayOfRects = findRectangles(image)
         val ptsByRec: ArrayList<Point> = ArrayList()
         arrayOfRects.forEach {
           ptsByRec.add(Point(0.0,0.0))  //x is a side y is b side
-          arrayOfKeyPts.toList().forEach {kPt ->
+          listOfKeyPts.forEach { kPt ->
               val pts = findKptsInRect(kPt,it)
               ptsByRec[ptsByRec.size-1].x += pts.x
               ptsByRec[ptsByRec.size-1].y += pts.y
           }
 
         }
-        Log.i("newWay","ptsByRec has ${ptsByRec.size} entries")
-        var cntr = 1
+        // got all the points now stored in ptsByRec
+        var finalPts  : ArrayList<Point> = ArrayList()
+
         ptsByRec.forEachIndexed { ins,it ->
-            if (it.x + it.y > 0) {
+            if (it.x + it.y > 0.0) {
                 Imgproc.rectangle(image, arrayOfRects[ins].tl(),
                     arrayOfRects[ins].br(), colorYellow, 2, Imgproc.LINE_8)
                 val ff = Point(arrayOfRects[ins].tl().x + arrayOfRects[ins].width/2,
                     arrayOfRects[ins].tl().y + arrayOfRects[ins].height/2)
+                finalPts.add(Point(it.x,it.y))
 
-                Imgproc.putText(image,cntr.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
+                Imgproc.putText(image,finalPts.size.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
                     1.2, colorRed,2)
+            }
 
-                Log.i("ptsByRec","Points for $ins ${it}")
-                cntr++
-            }
-            else{
-                ptsByRec.removeAt(ins)
-            }
         }
         val wrkBitmap = Bitmap.createBitmap(image.cols(),image.rows(),Bitmap.Config.ARGB_8888)
         val dominoBitmaps = ArrayList<Bitmap>()
         Utils.matToBitmap(image,wrkBitmap)
         dominoBitmaps.add(wrkBitmap)
-        return  MySubmatDomino(pts = ptsByRec,bitmapImgs = dominoBitmaps)
+        return  MySubmatDomino(pts = finalPts,bitmapImgs = dominoBitmaps)
 
 
     }

@@ -214,10 +214,7 @@ class SharedViewModel : ViewModel() {
         matCVT = fixMatRotation(matCVT, prev)
         Imgproc.resize(matCVT,matCVT,Size(700.0,900.0))
         val wrkMySubmatDomino = blobs(matCVT)
-        //val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(blobs(matCVT))
         _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
-        //_bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
-
         var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "
         var totPts = 0
         if (wrkMySubmatDomino.pts.isNotEmpty()) {
@@ -231,26 +228,6 @@ class SharedViewModel : ViewModel() {
         }
         _totalPoints.postValue(totPts.toString())
         _displayPts.value = showPoints
-    }
-    private fun combineImageIntoOne(bitmap: ArrayList<Bitmap>,cWidth: Int,cHeight: Int): Bitmap? {
-        val temp = Bitmap.createBitmap(cWidth, cHeight,Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(temp)
-        Log.i("HTML","Canvas width height is ${canvas.width}/${canvas.height}")
-        var top = 5
-        var left = 5
-        for (i in bitmap.indices ) {
-            canvas.drawBitmap(bitmap[i], left.toFloat(), top.toFloat(), null)
-            Log.i("drawImg","Drawing $i at $left/ $top")
-            if (left > (cWidth - 400) ) {
-                left = 5
-                top  += bitmap[i].height + 25
-            }
-            else
-            {
-                left += bitmap[i].width + 25
-            }
-        }
-        return temp
     }
 
 
