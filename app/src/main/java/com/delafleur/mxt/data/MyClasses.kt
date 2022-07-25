@@ -14,13 +14,13 @@ data class Players (var playerName: String){
 
     fun scoreTotalStr(): String {
         str = ""
-        score.forEach{ str += if(it == "0") "ns_" else it.padStart(2,'0')+"_"
+        score.forEach{ str += if(it == "0") "~_" else it.padStart(2,'0')+"_"
         }
         return str
     }
     fun scoreTotalStrTest(): String {
         str = ""
-        testScore.forEach{ str += if(it == "0") "ns_" else it.padStart(2,'0')+"_"
+        testScore.forEach{ str += if(it == "0") "~_" else it.padStart(2,'0')+"_"
         }
         return str
     }

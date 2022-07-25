@@ -7,11 +7,11 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\markd\.android\avd\Galaxy_A11_API_30.avd" />
+            <value value="C:\Users\markd\.android\avd\lenovo_tb-j616F_API_30.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-07-15T13:12:38.848413400Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-07-20T19:10:21.130506700Z" />
   </component>
 </project>

@@ -21,11 +21,13 @@ import com.delafleur.mxt.data.MySubmatDomino
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.core.Core.bitwise_not
+import org.opencv.features2d.Features2d
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
 import org.opencv.imgproc.Moments
 import java.nio.ByteBuffer
+import kotlin.system.exitProcess
 
 
 private val REQUIRED_PERMISSIONS = arrayOf("android.permission.CAMERA",
@@ -47,26 +49,6 @@ object CameraUtil {
                 .build()
         }
     }
-    /*commented out because this is for imageproxy from analysis and I'm using capture use case
-    which is formmated as jpeg
-    fun getMatFromImage(image: ImageProxy): Mat {
-        val yBuffer: ByteBuffer = image.planes[0].buffer
-        val uBuffer: ByteBuffer = image.planes[1].buffer
-        val vBuffer: ByteBuffer = image.planes[2].buffer
-        val ySize: Int = yBuffer.remaining()
-        val uSize: Int = uBuffer.remaining()
-        val vSize: Int = vBuffer.remaining()
-        val nv21 = ByteArray(ySize + uSize + vSize)
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-        val yuv = Mat(image.height + image.height / 2, image.width, CvType.CV_8UC3)
-        yuv.put(0, 0, nv21)
-        val mat = Mat()
-        Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2RGB_NV21, 3)
-        return mat
-    }
-    */
     fun fixMatRotation(matOrg: Mat, previewView: PreviewView?): Mat {
         val mat : Mat
 
@@ -111,8 +93,8 @@ object CameraUtil {
     }
     fun blobParamsInit ():SimpleBlobDetector_Params{
         val blobParms = SimpleBlobDetector_Params()
-        blobParms._filterByArea = false //true
-        blobParms._filterByCircularity = true
+        blobParms._filterByArea = true
+        blobParms._filterByCircularity = false
         blobParms._filterByColor = true
         blobParms._filterByConvexity = true
         blobParms._filterByInertia =   true
@@ -120,13 +102,13 @@ object CameraUtil {
         blobParms._maxConvexity = 3.4028234663852886e+38F
         blobParms._minCircularity = 0.800000011920929F
         blobParms._maxInertiaRatio = 3.4028234663852886e+38F
-        blobParms._minArea = 20F
+        blobParms._minArea = 25F
         blobParms._minConvexity = 0.800000011920929F
-        blobParms._minDistBetweenBlobs = 05.0F
+        blobParms._minDistBetweenBlobs = 10.0F
         blobParms._minInertiaRatio = 0.10000000149011612F
         blobParms._minRepeatability = 2
-        blobParms._maxThreshold = 255.0F
-        blobParms._minThreshold = 135.0F
+        blobParms._maxThreshold = 200.0F
+        blobParms._minThreshold = 100.0F
         blobParms._thresholdStep = 10.0F
         return blobParms
     }
@@ -156,127 +138,96 @@ object CameraUtil {
         detector.detect(mat,keypts)
         return keypts
     }
+    fun blobs(image: Mat):MySubmatDomino {
+        val arrayOfKeyPts = keypointDetector(image)
+        Features2d.drawKeypoints(
+            image, arrayOfKeyPts, image,colorYellow,
+            Features2d.DrawMatchesFlags_DEFAULT)
+        arrayOfKeyPts.toList().sortBy { it.pt.y }
+        arrayOfKeyPts.toList().sortBy { it.pt.x }
+        val arrayOfRects = findRectangles(image)
+        val ptsByRec: ArrayList<Point> = ArrayList()
+        arrayOfRects.forEach {
+          ptsByRec.add(Point(0.0,0.0))  //x is a side y is b side
+          arrayOfKeyPts.toList().forEach {kPt ->
+              val pts = findKptsInRect(kPt,it)
+              ptsByRec[ptsByRec.size-1].x += pts.x
+              ptsByRec[ptsByRec.size-1].y += pts.y
+          }
 
-    fun dominoArrayofMat(imgIn: Mat) :MySubmatDomino {
-        val grey = Mat()
-        val thresh = Mat()
+        }
+        Log.i("newWay","ptsByRec has ${ptsByRec.size} entries")
+        var cntr = 1
+        ptsByRec.forEachIndexed { ins,it ->
+            if (it.x + it.y > 0) {
+                Imgproc.rectangle(image, arrayOfRects[ins].tl(),
+                    arrayOfRects[ins].br(), colorYellow, 2, Imgproc.LINE_8)
+                val ff = Point(arrayOfRects[ins].tl().x + arrayOfRects[ins].width/2,
+                    arrayOfRects[ins].tl().y + arrayOfRects[ins].height/2)
+
+                Imgproc.putText(image,cntr.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
+                    1.2, colorRed,2)
+
+                Log.i("ptsByRec","Points for $ins ${it}")
+                cntr++
+            }
+            else{
+                ptsByRec.removeAt(ins)
+            }
+        }
+        val wrkBitmap = Bitmap.createBitmap(image.cols(),image.rows(),Bitmap.Config.ARGB_8888)
         val dominoBitmaps = ArrayList<Bitmap>()
+        Utils.matToBitmap(image,wrkBitmap)
+        dominoBitmaps.add(wrkBitmap)
+        return  MySubmatDomino(pts = ptsByRec,bitmapImgs = dominoBitmaps)
+
+
+    }
+   fun findKptsInRect(kPt: KeyPoint,rctPt: Rect) :Point{
+       //kPt is the keypoint we're looking for in the rectangle
+       // note: check out the method keypoint.pt.inside . I couldn't find an doco on it but
+       //       it simplifies finding a point in a rectangle.
+       var rctPtB : Rect = Rect()
+       var rctPtA : Rect = Rect()
+       var outVal : Point = Point(0.0,0.0)
+       if(rctPt.width > rctPt.height) {
+            rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
+           Log.i("showRctB","rctPtB is ${rctPtB} vs rctPt ${rctPt}")
+            rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
+       }else
+       {
+           rctPtB = Rect(rctPt.x,rctPt.y+rctPt.height/2,rctPt.width,rctPt.height/2)
+           rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width , rctPt.height/2)
+       }
+       if(kPt.pt.inside(rctPtB))  outVal = Point(0.0,1.0)
+       if (kPt.pt.inside(rctPtA)) outVal = Point(1.0,0.0)
+       return outVal
+    }
+    fun findRectangles(imgin: Mat) :List<Rect> {
+        val wrkGrey = Mat()
         val contours: List<MatOfPoint> = ArrayList()
+        val wrkRects: ArrayList<Rect> = ArrayList()
         val contour2f = MatOfPoint2f()
         var peri: Double
         val poly = MatOfPoint2f()
-        var rectWrk :Rect
-        var wrkMat :Mat
-        val ptsOutList = ArrayList<Point>()
-        val dominoMats = ArrayList<Mat>()
-
-        Imgproc.cvtColor(imgIn, grey,Imgproc.COLOR_BGR2GRAY)
-        Imgproc.threshold(grey, thresh, 155.0, 255.0, Imgproc.THRESH_BINARY)
-        Imgproc.findContours(thresh,contours,Mat(), Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE)
-
+        Imgproc.cvtColor(imgin, wrkGrey, Imgproc.COLOR_BGR2GRAY)
+        Imgproc.threshold(wrkGrey, wrkGrey, 155.0, 255.0, Imgproc.THRESH_BINARY)
+        Imgproc.findContours(
+            wrkGrey,
+            contours,
+            Mat(),
+            Imgproc.RETR_EXTERNAL,
+            Imgproc.CHAIN_APPROX_NONE  )
         contours.forEach {
             it.convertTo(contour2f, CvType.CV_32FC2)
             peri = Imgproc.arcLength(contour2f, true)
             Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
-            rectWrk = Imgproc.boundingRect(poly)
-            wrkMat = Mat(imgIn, rectWrk)
-            val chkPts = PointsfromCroppedImage(wrkMat)
-            if (chkPts.x + chkPts.y > 0) {
-                ptsOutList.add(chkPts)
-                // take the rectWrk.tl and add a few rows
-                val ff = Point(rectWrk.tl().x+30,rectWrk.tl().y+30)
-                Imgproc.rectangle(imgIn, rectWrk.tl(),rectWrk.br(), colorGreen, 2,Imgproc.LINE_8 )
-                Imgproc.putText(imgIn,ptsOutList.size.toString(),ff,Imgproc.FONT_HERSHEY_SIMPLEX,
-                1.2, colorRed,2)
-                //org.opencv.features2d.Features2d.drawKeypoints(imgIn,chkPts,imgIn,
-                //    colorBlue,4)
-                dominoMats.add(wrkMat)
-            }
+            wrkRects.add(Imgproc.boundingRect(poly))
         }
-            /*dominoMats.add(imgIn)
-            dominoMats.sortBy { it.rows() }
-                dominoMats.sortByDescending { it.cols() }
-
-                dominoMats.forEach {
-
-                 //   Imgproc.resize(it,it,Size(50.0,100.0))
-                    wrkPts = PointsfromCroppedImage(it)
-                    val z = wrkPts.x + wrkPts.y
-                    if (z > 2) {
-                        Log.i("Points"," rows cols ${wrkPts} ${it.rows()} ${it.cols()}")
-                        ptsOutList.add(wrkPts)
-                        val tempIt = putNumbersOnCrops(it, wrkPts)
-                        val wrkBitmap =
-                            Bitmap.createBitmap(it.cols(), it.rows(), Bitmap.Config.ARGB_8888)
-                        Utils.matToBitmap(tempIt, wrkBitmap)
-                        dominoBitmaps.add(wrkBitmap)
-                    }
-                }
-*/
-        val wrkBitmap = Bitmap.createBitmap(imgIn.cols(),imgIn.rows(),Bitmap.Config.ARGB_8888)
-        Utils.matToBitmap(imgIn,wrkBitmap)
-        dominoBitmaps.add(wrkBitmap)
-
-
-
-        Log.i("bitmaps","passing ${dominoBitmaps.size} back from dominoArrayofMat method")
-        return  MySubmatDomino(pts = ptsOutList,bitmapImgs = dominoBitmaps)
-    }
-
-    fun PointsfromCroppedImage(cropImage: Mat) :Point{
-        val ptsOut = Point(0.0,0.0)
-        if (cropImage.rows() < 20) {
-            return ptsOut
-        }
-        Log.i("ptsD", "cropImage rows >  20")
-
-        if (cropImage.rows() < cropImage.cols()) Core.rotate(
-            cropImage,cropImage,Core.ROTATE_90_CLOCKWISE)
-
-        val sRow = cropImage.rows()
-        val sCol = cropImage.cols()
-
-        ptsOut.x = (keypointDetector(cropImage.submat(0,
-            sRow/2,
-            0, sCol)).toList().size).toDouble()
-        ptsOut.y = (keypointDetector(cropImage.submat(sRow/2,
-            sRow,0,sCol)).toList().size).toDouble()
-        return ptsOut
-    }
-     fun putNumbersOnCrops(wrkM: Mat, ptsIn :Point): Mat {
-        val grey = Mat()
-        Log.i("numbersonDomino","wrkMat size is ${wrkM.width()}" +
-                "/${wrkM.height()}")
-         Log.i("numbersonDomino","image rows / cols /width/height ${wrkM.rows()}" +
-                 " ${wrkM.cols()} ${wrkM.width()} ${wrkM.height()}")
-        //middle is cols / 2 rows /2
-        //Imgproc.cvtColor(wrkM, grey,Imgproc.COLOR_BGR2GRAY)
-         //  val center = Point(0.0,0.0)
-         //  center.x = (mu.m10 / mu.m00)
-         //  center.y = (mu.m01 /mu.m00)
-         //  val centerH = Point((center.x - center.x/2) , (center.y - center.y/2))
-       // val centerL = Point((center.x - center.x/2), (center.y + center.y))
-     Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
-       Point(10.0,40.0),
-         Imgproc.FONT_HERSHEY_SIMPLEX,
-         1.0, colorRed,2,1,false)
-
-         Imgproc.putText(wrkM,ptsIn.y.toInt().toString(),
-             Point(10.0,80.0),
-             Imgproc.FONT_HERSHEY_SIMPLEX,
-             1.0, colorBlack,2,1,false)
-
-         /*   Imgproc.putText(wrkM,ptsIn.x.toInt().toString(),
-                       centerH, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorGreen,
-                2,1,false)
-            Imgproc.putText(wrkM,ptsIn.y.toInt().toString(),
-                       centerL, Imgproc.FONT_HERSHEY_SIMPLEX,1.0, colorRed,
-                2,1,false)
-         */
-        return wrkM
+        return wrkRects.sortedBy { it.tl().x }
     }
     fun Fragment.runOnUiThread(action: () -> Unit) {
         if (!isAdded) return
         activity?.runOnUiThread(action)
     }
-    }
+}

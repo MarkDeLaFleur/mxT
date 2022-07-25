@@ -18,6 +18,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.ActionBar
 import androidx.camera.camera2.internal.compat.workaround.TargetAspectRatio
+import androidx.camera.core.ImageCapture.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.QualitySelector.getResolution
 import androidx.compose.runtime.Composable
@@ -61,12 +62,9 @@ class CameracaptureFragment : Fragment() {
             preview = view.findViewById(R.id.viewPreview)
             cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
-            cameraController.setImageCaptureFlashMode(1)
-            cameraController.imageCaptureFlashMode = ImageCapture.FLASH_MODE_AUTO
-
             cameraController.imageCaptureTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
             cameraController.previewTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
-
+            cameraController.imageCaptureFlashMode= FLASH_MODE_OFF
             cameraController.bindToLifecycle(viewLifecycleOwner)
             preview.controller = cameraController
             Log.i("log","preview w/h ${preview.width}/${preview.height}")
@@ -87,7 +85,7 @@ class CameracaptureFragment : Fragment() {
            activity?.runOnUiThread(action)
         }
         fun takePhoto() {
-           // cameraController.imageCaptureFlashMode=1
+            cameraController.imageCaptureFlashMode=FLASH_MODE_AUTO
             cameraController.takePicture(
                 ContextCompat.getMainExecutor(binding.root.context),
                 object: ImageCapture.OnImageCapturedCallback() {

@@ -10,10 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.delafleur.mxt.util.CameraUtil
 import com.delafleur.mxt.util.CameraUtil.JPGtoRGB888
+import com.delafleur.mxt.util.CameraUtil.blobs
 import com.delafleur.mxt.util.CameraUtil.fixMatRotation
+
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
-import org.opencv.core.CvType.CV_8UC3
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
@@ -56,7 +57,7 @@ class SharedViewModel : ViewModel() {
 
     fun setPlayer(strg: String){// this is the players index. Will be used when totalling domino.
         _playerIndex.value =  strg
-        Log.i("view","player ${strg}")
+        Log.i("view","player $strg")
     }
     fun setVisibiltyNewGame () {_playerVisibility.value = mutableListOf(true,true,true,true,true,
     true,true,true)}
@@ -104,14 +105,14 @@ class SharedViewModel : ViewModel() {
             playerT[7].score[domButton])
     }
     fun setPlayerSummaries(){
-        val visibilityList = MutableList<Boolean>(8){true}
+        val visibilityList = MutableList(8){true}
         visibilityList.forEachIndexed { i, it ->
             Log.i("visi","player i ${playerT[i].playerName.length}")
             if (playerT[i].playerName.length < 2) {
                 visibilityList[i] = false
             }
         }
-        Log.i("visi","${visibilityList.joinToString()}")
+        Log.i("visi","$visibilityList")
         _playerVisibility.value = mutableListOf(
             visibilityList[0],visibilityList[1],visibilityList[2],visibilityList[3],
             visibilityList[4],visibilityList[5],visibilityList[6],visibilityList[7])
@@ -157,7 +158,7 @@ class SharedViewModel : ViewModel() {
         Log.i("ptsP","current domino button is ${currentRound.value}")
         Log.i("ptsP","Player index is ${playerIndex.value}")
         playerT[playerIndex.value!!.toInt() ].
-            score[currentRound.value!!] = totalPoints!!.value.toString()
+            score[currentRound.value!!] = totalPoints.value.toString()
         refreshScoreLiveData(currentRound.value!!)
     }
     fun addScoresToPlayerT(dominoButton :Int,scoresToAdd: Array<String>){
@@ -211,22 +212,22 @@ class SharedViewModel : ViewModel() {
         var matCVT = Mat()
         Utils.bitmapToMat(cvBitmap, matCVT)
         matCVT = fixMatRotation(matCVT, prev)
-        Imgproc.resize(matCVT,matCVT,Size(600.0,900.0))
-        val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(matCVT)
+        Imgproc.resize(matCVT,matCVT,Size(700.0,900.0))
+        val wrkMySubmatDomino = blobs(matCVT)
+        //val wrkMySubmatDomino = CameraUtil.dominoArrayofMat(blobs(matCVT))
         _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
         //_bitmapx.value = combineImageIntoOne(wrkMySubmatDomino.bitmapImgs,prev.width,prev.height)
 
         var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "
         var totPts = 0
-        if (wrkMySubmatDomino.pts.size > 0) {
+        if (wrkMySubmatDomino.pts.isNotEmpty()) {
             wrkMySubmatDomino.pts.forEachIndexed {inX, it ->
                 showPoints += (inX+1).toString()+"--("+ it.x.toInt().toString() + "/" + it.y.toInt().toString() +
                         ") "
                 Log.i("pts", "$it + $totPts")
                 totPts += (it.x + it.y).toInt()
             }
-            showPoints = showPoints.substring(0, showPoints.lastIndexOf("+")) +
-                    " = " + totPts.toString()
+            showPoints += " Total = " + totPts.toString()
         }
         _totalPoints.postValue(totPts.toString())
         _displayPts.value = showPoints
@@ -239,7 +240,7 @@ class SharedViewModel : ViewModel() {
         var left = 5
         for (i in bitmap.indices ) {
             canvas.drawBitmap(bitmap[i], left.toFloat(), top.toFloat(), null)
-            Log.i("drawImg","Drawing $i at ${left}/ ${top}")
+            Log.i("drawImg","Drawing $i at $left/ $top")
             if (left > (cWidth - 400) ) {
                 left = 5
                 top  += bitmap[i].height + 25

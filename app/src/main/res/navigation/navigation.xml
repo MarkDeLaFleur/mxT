@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/cameraShowImageFragment"
         android:name="com.delafleur.mxt.ui.CameraShowImageFragment"
-        android:label="Get the Points"
+        android:label="Count the Points"
         tools:layout="@layout/fragment_camera_show_image">
         <action
             android:id="@+id/action_cameraShowImageFragment_to_playersFragment"

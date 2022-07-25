@@ -60,29 +60,33 @@
 
             <TableRow
                 android:id="@+id/TR0"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:paddingVertical="4dp">
 
                 <TextView
                     android:id="@+id/TR0C1"
-                    android:layout_width="93dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Player"
                     android:textAlignment="center"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/TR0C2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="Total"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/TR0C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:text="Scores"
                     android:textAlignment="center"
                     android:textStyle="bold" />
@@ -90,162 +94,192 @@
 
             <TableRow
                 android:id="@+id/TR1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[0] ? View.VISIBLE : View.INVISIBLE}"
-                android:paddingVertical="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="1dp"
+                android:visibility="@{sharedVM.playerVisibility[0] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR1C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[0]}" />
 
                 <TextView
                     android:id="@+id/TR1C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[0]}" />
 
                 <TextView
                     android:id="@+id/TR1C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[0]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR2"
-                android:visibility="@{sharedVM.playerVisibility[1] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="4dp"
+                android:visibility="@{sharedVM.playerVisibility[1] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR2C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[1]}" />
 
                 <TextView
                     android:id="@+id/TR2C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[1]}" />
 
                 <TextView
                     android:id="@+id/TR2C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[1]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR3"
-                android:layout_width="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[2] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_height="match_parent"
-                android:paddingVertical="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="1dp"
+                android:visibility="@{sharedVM.playerVisibility[2] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR3C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[2]}" />
 
                 <TextView
                     android:id="@+id/TR3C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[2]}" />
 
                 <TextView
                     android:id="@+id/TR3C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:text="@{sharedVM.playerLiveDataSumStr[2]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR4"
-                android:layout_width="match_parent"
-                android:visibility="@{sharedVM.playerVisibility[3] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_height="match_parent"
-                android:paddingVertical="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="4dp"
+                android:visibility="@{sharedVM.playerVisibility[3] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR4C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[3]}" />
 
                 <TextView
                     android:id="@+id/TR4C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[3]}" />
 
                 <TextView
                     android:id="@+id/TR4C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[3]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR5"
-                android:visibility="@{sharedVM.playerVisibility[4] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="4dp"
+                android:visibility="@{sharedVM.playerVisibility[4] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR5C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[4]}" />
 
                 <TextView
                     android:id="@+id/TR5C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[4]}" />
 
                 <TextView
                     android:id="@+id/TR5C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[4]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR6"
-                android:visibility="@{sharedVM.playerVisibility[5] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="4dp"
+                android:visibility="@{sharedVM.playerVisibility[5] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR6C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[5]}" />
 
                 <TextView
                     android:id="@+id/TR6C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[5]}" />
 
                 <TextView
                     android:id="@+id/TR6C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[5]}" />
             </TableRow>
 
@@ -258,46 +292,57 @@
 
                 <EditText
                     android:id="@+id/TR7C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[6]}" />
 
                 <TextView
                     android:id="@+id/TR7C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[6]}" />
 
                 <TextView
                     android:id="@+id/TR7C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[6]}" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/TR8"
-                android:visibility="@{sharedVM.playerVisibility[7] ? View.VISIBLE : View.INVISIBLE}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="4dp">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="4dp"
+                android:visibility="@{sharedVM.playerVisibility[7] ? View.VISIBLE : View.INVISIBLE}">
 
                 <EditText
                     android:id="@+id/TR8C1"
-                    android:layout_width="93dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataName[7]}" />
 
                 <TextView
                     android:id="@+id/TR8C2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".6"
                     android:text="@{sharedVM.playerLiveDataSumTot[7]}" />
 
                 <TextView
                     android:id="@+id/TR8C3"
-                    android:layout_width="224dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:autoSizeTextType="uniform"
                     android:text="@{sharedVM.playerLiveDataSumStr[7]}" />
             </TableRow>
         </TableLayout>
