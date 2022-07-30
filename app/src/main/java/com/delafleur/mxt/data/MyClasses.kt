@@ -1,10 +1,24 @@
 package com.delafleur.mxt.data
 
+import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
-import org.opencv.core.Mat
 import org.opencv.core.Point
 import kotlin.random.Random
 
+
+class MxT : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        context = applicationContext
+    }
+
+    companion object {
+        var context: Context? = null
+        val appContext: Context?
+            get() = context
+    }
+}
 data class Players (var playerName: String){
     val testScore =  List(13){ Random.nextInt(0,155)}.map{it.toString()}.toTypedArray()
     var score = Array(13){"0"}

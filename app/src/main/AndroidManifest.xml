@@ -16,6 +16,7 @@
         android:allowBackup="true"
         android:icon="@drawable/mxt"
         android:label="@string/app_name"
+        android:name="com.delafleur.mxt.data.MxT"
         android:roundIcon="@drawable/mxt"
         android:supportsRtl="true"
         android:theme="@style/Theme.MxT">

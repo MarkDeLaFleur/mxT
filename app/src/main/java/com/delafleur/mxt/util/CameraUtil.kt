@@ -1,10 +1,6 @@
 package com.delafleur.mxt.util
 
-import android.Manifest
-import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
@@ -12,26 +8,19 @@ import android.view.Surface
 import androidx.camera.camera2.Camera2Config
 import androidx.camera.core.*
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delafleur.mxt.util.CameraUtil.blobParamsInit
 import com.delafleur.mxt.data.MySubmatDomino
-
 import org.opencv.android.Utils
 import org.opencv.core.*
-import org.opencv.core.Core.bitwise_not
 import org.opencv.features2d.Features2d
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
-import org.opencv.imgproc.Moments
 import java.nio.ByteBuffer
-import kotlin.system.exitProcess
 
 
-private val REQUIRED_PERMISSIONS = arrayOf("android.permission.CAMERA",
-                             "android.permission.WRITE_EXTERNAL_STORAGE")
+
 val colorRed = Scalar(255.0,0.0,0.0,255.0)
 val colorBlue = Scalar(0.0,0.0,255.0,255.0)
 val colorBlue2 = Scalar(155.0,0.0,0.0,255.0)
@@ -111,27 +100,6 @@ object CameraUtil {
         blobParms._minThreshold = 100.0F
         blobParms._thresholdStep = 10.0F
         return blobParms
-    }
-    fun checkPermissions(context: Context): Boolean {
-        for (permission in REQUIRED_PERMISSIONS) {
-            if (context.let {
-                    ContextCompat.checkSelfPermission(
-                        it,
-                        permission
-                    )
-                } != PackageManager.PERMISSION_GRANTED
-            ) {
-                return false
-            }
-        }
-        return true
-    }
-
-    fun userRequestPermissions(activity: Activity) {
-        ActivityCompat.requestPermissions(
-            activity,
-            arrayOf(Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE),2000)
     }
     fun keypointDetector(mat: Mat): MatOfKeyPoint {
         val keypts = MatOfKeyPoint()

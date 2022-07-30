@@ -1,19 +1,25 @@
 package com.delafleur.mxt.util
 
+import android.content.Context
 import android.os.Environment
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
+import androidx.core.content.ContextCompat
+import com.delafleur.mxt.data.MxT
 import com.opencsv.CSVReader
 import com.opencsv.CSVWriter
 import java.io.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-val fileName = "mXtrainTest.csv"
-val fileI = File(
+val fileName = "mxT.csv"
+val fileI = File( MxT.context?.getExternalFilesDir(null),fileName).absolutePath
+val fileIold = File(
     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
     fileName).absolutePath  // note this is actually returning a full pathname as a string
 val fileX = File(fileI)
-val fileSamsung = File("sdcard/Download/"+ fileName)
+
 fun backupCSV(){
     val fileNameOut = "dominoS" + DateTimeFormatter.ofPattern("yyyyLLLLddhhmmss").format(LocalDateTime.now()) + ".csv"
     val fileO = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),fileNameOut).absolutePath
@@ -25,8 +31,6 @@ fun backupCSV(){
     }catch (e: IOException){
         if (checkFile())Log.i("backup","no file to backup, created new one")
     }
-
-
 }
 fun writeCSV(scoreRecords: MutableList<Array<String>>){
 
@@ -65,15 +69,15 @@ fun checkFile() :Boolean {
 fun readCSV() : MutableList<Array<String>> {
         var csvReaderData = mutableListOf<Array<String>>()
         try{
-            Log.i("myIO","reading csvFile ${fileSamsung}")
-            csvReaderData = CSVReader(FileReader(fileSamsung)).readAll()
+            Log.i("myIO","reading csvFile ${fileI}")
+            csvReaderData = CSVReader(FileReader(fileI)).readAll()
             if (csvReaderData.size == 0){
                 Log.i("myIO","File was created loading playerT from initfile")
                 return initCsvFile()
             }
         } catch (e: IOException){
 
-            Log.i("myIO","Hit the exception area on ${e.message} checkFIle is ${checkFile()}")
+            Log.i("myIO","Exception error on ${e.message} checkFIle is ${checkFile()}")
             Log.i("myIO", "csvreader data from initPlayers Table")
             Log.e("IOException", "${e.message} Exception ")
                 csvReaderData = initCsvFile()

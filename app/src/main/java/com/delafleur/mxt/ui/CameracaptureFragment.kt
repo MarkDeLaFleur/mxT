@@ -2,10 +2,8 @@ package com.delafleur.mxt.ui
 
 
 import android.annotation.SuppressLint
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.view.*
 import androidx.camera.core.*
 import androidx.camera.view.CameraController
@@ -15,16 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.appcompat.app.ActionBar
 import androidx.camera.camera2.internal.compat.workaround.TargetAspectRatio
 import androidx.camera.core.ImageCapture.*
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.QualitySelector.getResolution
-import androidx.compose.runtime.Composable
-import com.delafleur.mxt.util.CameraUtil
-import com.delafleur.mxt.util.CameraUtil.checkPermissions
-import com.delafleur.mxt.util.CameraUtil.userRequestPermissions
+import com.delafleur.mxt.MainActivity
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentCameracaptureBinding
@@ -51,7 +42,6 @@ class CameracaptureFragment : Fragment() {
             _binding = FragmentCameracaptureBinding.inflate(inflater, container, false)
             cameraController = LifecycleCameraController(binding.root.context)
             cameraExecutor = Executors.newSingleThreadExecutor()
-            checkPermissions(binding.root.context)
             return binding.root
 
         }
