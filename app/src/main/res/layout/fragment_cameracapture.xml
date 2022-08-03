@@ -26,17 +26,20 @@ tools:context=".CameracaptureFragment">
 
             <Button
                 android:id="@+id/button8"
-                android:layout_width="94dp"
-                android:layout_height="62dp"
-                android:foreground="@mipmap/ic_picsnap"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:backgroundTint="@color/black"
                 android:onClick="@{() -> cameracaptureFragment.takePhoto()}"
-                android:text="CAPTURE"
-                app:icon="@mipmap/ic_picsnap"
+                android:soundEffectsEnabled="true"
+                android:text=""
+                app:icon="@drawable/ic_camera_shutter"
+                app:iconPadding="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/viewPreview"
-                app:layout_constraintVertical_bias=".88" />
+                app:layout_constraintVertical_bias="0.947"
+                app:layout_wrapBehaviorInParent="skipped" />
 
             <view
                 android:id="@+id/viewPreview"

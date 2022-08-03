@@ -26,7 +26,7 @@ val colorBlue = Scalar(0.0,0.0,255.0,255.0)
 val colorBlue2 = Scalar(155.0,0.0,0.0,255.0)
 val colorGreen = Scalar(0.0,255.0,0.0,255.0)
 val colorBlack = Scalar(50.0,50.0,0.0,255.0)
-val colorYellow = Scalar(255.0,180.0,0.0,255.0)
+val colorYellow = Scalar(255.0,160.0,0.0,255.0)
 val colorWhite = Scalar(0.0,0.0,0.0,255.0)
 private val blobparms = blobParamsInit()
 private val detector: SimpleBlobDetector = SimpleBlobDetector.create(blobparms)
@@ -61,7 +61,7 @@ object CameraUtil {
         return mat
     }
     fun JPGtoRGB888(img: Bitmap): Bitmap? {
-        var result: Bitmap? = null
+        val result: Bitmap?
         val numPixels = img.width * img.height
         val pixels = IntArray(numPixels)
         // get jpeg pixels, each int is the color value of one pixel
@@ -87,11 +87,11 @@ object CameraUtil {
         blobParms._filterByColor = true
         blobParms._filterByConvexity = true
         blobParms._filterByInertia =   true
-        blobParms._maxArea =  5000.0F
+        blobParms._maxArea =  300.0F
         blobParms._maxConvexity = 3.4028234663852886e+38F
         blobParms._minCircularity = 0.800000011920929F
         blobParms._maxInertiaRatio = 3.4028234663852886e+38F
-        blobParms._minArea = 25F
+        blobParms._minArea = 70F
         blobParms._minConvexity = 0.800000011920929F
         blobParms._minDistBetweenBlobs = 10.0F
         blobParms._minInertiaRatio = 0.10000000149011612F
@@ -109,11 +109,26 @@ object CameraUtil {
     fun blobs(image: Mat):MySubmatDomino {
         val arrayOfKeyPts = keypointDetector(image)
         val listOfKeyPts  = arrayOfKeyPts.toList()
+     //   listOfKeyPts.sortByDescending { it.pt.y }
+     //   listOfKeyPts.sortByDescending { it.pt.x }
         listOfKeyPts.sortBy { it.pt.y }
-        listOfKeyPts.sortBy { it.pt.x }
+
+        listOfKeyPts.forEach {
+            val radius = it.size.toInt()/2
+            Imgproc.circle(image,it.pt,radius, colorYellow,-1)
+        // this gives a nice filled in dot instead a faint circle around the keypoint
+        }
+        /* other way to draw the keypoints with a circle around the captured keypoint.
         Features2d.drawKeypoints(
-            image, arrayOfKeyPts, image,colorYellow,
-            Features2d.DrawMatchesFlags_DEFAULT)
+            image, arrayOfKeyPts,
+            image,
+            Scalar.all(-1.0),
+            //colorYellow,
+           // Features2d.DrawMatchesFlags_DRAW_OVER_OUTIMG
+            Features2d.DrawMatchesFlags_DRAW_RICH_KEYPOINTS
+           // Features2d.DrawMatchesFlags_DEFAULT
+        )
+        */
         val arrayOfRects = findRectangles(image)
         val ptsByRec: ArrayList<Point> = ArrayList()
         arrayOfRects.forEach {
@@ -126,12 +141,12 @@ object CameraUtil {
 
         }
         // got all the points now stored in ptsByRec
-        var finalPts  : ArrayList<Point> = ArrayList()
+        val finalPts  : ArrayList<Point> = ArrayList()
 
         ptsByRec.forEachIndexed { ins,it ->
             if (it.x + it.y > 0.0) {
                 Imgproc.rectangle(image, arrayOfRects[ins].tl(),
-                    arrayOfRects[ins].br(), colorYellow, 2, Imgproc.LINE_8)
+                    arrayOfRects[ins].br(), colorGreen, 2, Imgproc.LINE_8)
                 val ff = Point(arrayOfRects[ins].tl().x + arrayOfRects[ins].width/2,
                     arrayOfRects[ins].tl().y + arrayOfRects[ins].height/2)
                 finalPts.add(Point(it.x,it.y))
@@ -153,17 +168,17 @@ object CameraUtil {
        //kPt is the keypoint we're looking for in the rectangle
        // note: check out the method keypoint.pt.inside . I couldn't find an doco on it but
        //       it simplifies finding a point in a rectangle.
-       var rctPtB : Rect = Rect()
-       var rctPtA : Rect = Rect()
-       var outVal : Point = Point(0.0,0.0)
+       val rctPtA: Rect
+       val rctPtB: Rect
+       var outVal  = Point(0.0,0.0)
        if(rctPt.width > rctPt.height) {
-            rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
+          rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
            Log.i("showRctB","rctPtB is ${rctPtB} vs rctPt ${rctPt}")
-            rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
+           rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
        }else
        {
-           rctPtB = Rect(rctPt.x,rctPt.y+rctPt.height/2,rctPt.width,rctPt.height/2)
-           rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width , rctPt.height/2)
+         rctPtB = Rect(rctPt.x,rctPt.y+rctPt.height/2,rctPt.width,rctPt.height/2)
+         rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width , rctPt.height/2)
        }
        if(kPt.pt.inside(rctPtB))  outVal = Point(0.0,1.0)
        if (kPt.pt.inside(rctPtA)) outVal = Point(1.0,0.0)
