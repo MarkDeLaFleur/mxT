@@ -106,7 +106,7 @@ class SharedViewModel : ViewModel() {
     }
     fun setPlayerSummaries(){
         val visibilityList = MutableList(8){true}
-        visibilityList.forEachIndexed { i, it ->
+        visibilityList.forEachIndexed { i, _ ->
             Log.i("visi","player i ${playerT[i].playerName.length}")
             if (playerT[i].playerName.length < 2) {
                 visibilityList[i] = false
@@ -136,7 +136,7 @@ class SharedViewModel : ViewModel() {
     fun clearProcess(){
        _playerIndex.value = ""
         _totalPoints.value = ""
-        _currentRound!!.value = null
+        _currentRound.value = null
         _scoreFieldLiveData.value = mutableListOf("0","0","0","0","0","0","0","0")
     }
     fun buildPlayersFromCSVrecords(inPut: MutableList<Array<String>>) {
@@ -171,7 +171,7 @@ class SharedViewModel : ViewModel() {
         else{
 
             _roundScored.value = "Round " + dominoButton.toString() + " UPDATED -->"
-            _currentRound!!.value = null
+            _currentRound.value = null
             scoresToAdd.forEachIndexed { i, j ->
                if (j.length > 0 && playerT[i].playerName.length > 1) {
                     playerT[i].score[dominoButton] = j}

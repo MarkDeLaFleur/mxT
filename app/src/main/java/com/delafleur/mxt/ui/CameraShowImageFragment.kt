@@ -25,7 +25,6 @@ class CameraShowImageFragment : Fragment() {
     ): View? {
         val fragmentBinding = FragmentCameraShowImageBinding.inflate(inflater, container, false)
         binding = fragmentBinding
-        setHasOptionsMenu(true)
         return fragmentBinding.root
     }
 
