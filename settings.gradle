@@ -1,5 +1,21 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 rootProject.name = "MxT"
-
 include ':app'
-
-
+def opencvsdk='C:\\Users\\markd\\openCV470Android'
+//   // You can put declaration above into gradle.properties file instead (including file in HOME directory),
+//   // but without 'def' and apostrophe symbols ('): opencvsdk=<path_to_opencv_android_sdk_rootdir>
+include ':opencv'
+project(':opencv').projectDir = new File(opencvsdk + '/sdk')

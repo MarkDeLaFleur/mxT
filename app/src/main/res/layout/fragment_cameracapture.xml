@@ -39,7 +39,7 @@ tools:context=".CameracaptureFragment">
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/viewPreview"
                 app:layout_constraintVertical_bias="0.947"
-                app:layout_wrapBehaviorInParent="skipped" />
+            />
 
             <view
                 android:id="@+id/viewPreview"

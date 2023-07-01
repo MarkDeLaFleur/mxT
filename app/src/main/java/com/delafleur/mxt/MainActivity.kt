@@ -1,22 +1,18 @@
 package com.delafleur.mxt
 
-import android.Manifest
+
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import org.opencv.android.OpenCVLoader
-import org.opencv.core.Mat
 
  class MainActivity : AppCompatActivity(R.layout.activity_main) {
      private lateinit var navController: NavController
@@ -29,11 +25,10 @@ import org.opencv.core.Mat
          if (!OpenCVLoader.initDebug()) Log.e("OpenCV", "Unable to load OpenCV!")
          else   Log.d("OpenCV", "OpenCV loaded Successfully!")
          if(!checkPermissions(this)) userRequestPermissions(this)
-         val navController = (
-                 supportFragmentManager.findFragmentById(R.id.myNavHostFragment)
-                         as NavHostFragment
-                 ).navController
-            setupActionBarWithNavController(navController)
+         navController = (supportFragmentManager.findFragmentById(R.id.myNavHostFragment)
+                 as NavHostFragment).navController
+         setupActionBarWithNavController(navController)
+
 
      }
 
