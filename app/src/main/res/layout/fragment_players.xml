@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@{sharedVM.scoredRounds[12] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(12)}"
-                    android:src="@drawable/ic_doubletwelve" />
+                    android:src="@drawable/ic_doubletwelve_wide" />
+
 
                 <ImageButton
                     android:id="@+id/imageButton11"
@@ -86,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@{sharedVM.scoredRounds[11] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(11)}"
-                    android:src="@drawable/ic_doubleeleven" />
+                    android:src="@drawable/ic_doubleeleven_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton10"
@@ -95,7 +96,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[10] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(10)}"
-                    android:src="@drawable/ic_doubleten" />
+                    android:src="@drawable/ic_doubleten_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton9"
@@ -104,7 +105,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[9] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(9)}"
-                    android:src="@drawable/ic_doublenine" />
+                    android:src="@drawable/ic_doublenine_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton8"
@@ -113,7 +114,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[8] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(8)}"
-                    android:src="@drawable/ic_doubleeight" />
+                    android:src="@drawable/ic_doubleeight_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton7"
@@ -122,7 +123,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[7] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(7)}"
-                    android:src="@drawable/ic_doubleseven" />
+                    android:src="@drawable/ic_doubleseven_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton6"
@@ -131,7 +132,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[6] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(6)}"
-                    android:src="@drawable/ic_doublesix" />
+                    android:src="@drawable/ic_doublesix_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton5"
@@ -140,7 +141,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[5] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(5)}"
-                    android:src="@drawable/ic_doublefive" />
+                    android:src="@drawable/ic_doublefive_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton4"
@@ -149,7 +150,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[4] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(4)}"
-                    android:src="@drawable/ic_doublefour" />
+                    android:src="@drawable/ic_doublefour_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton3"
@@ -158,7 +159,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[3] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(3)}"
-                    android:src="@drawable/ic_doublethree" />
+                    android:src="@drawable/ic_doublethree_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton2"
@@ -167,7 +168,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[2] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(2)}"
-                    android:src="@drawable/ic_doubletwo" />
+                    android:src="@drawable/ic_doubletwo_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton1"
@@ -176,7 +177,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[1] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(1)}"
-                    android:src="@drawable/ic_doubleone" />
+                    android:src="@drawable/ic_doubleone_wide" />
 
                 <ImageButton
                     android:id="@+id/imageButton0"
@@ -185,7 +186,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@{sharedVM.scoredRounds[0] ? @color/Green : @color/Grey}"
                     android:onClick="@{() -> playersFragment.onDominoButtonClicked(0)}"
-                    android:src="@drawable/ic_doubleblank" />
+                    android:src="@drawable/ic_doubleblank_wide" />
             </LinearLayout>
         </HorizontalScrollView>
 

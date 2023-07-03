@@ -19,6 +19,8 @@ import com.delafleur.mxt.MainActivity
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
 import com.delafleur.mxt.databinding.FragmentCameracaptureBinding
+
+import com.delafleur.mxt.databinding.FragmentCameracapturexBinding
 import com.delafleur.mxt.util.readCSV
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -26,7 +28,7 @@ import java.util.concurrent.Executors
 
 class CameracaptureFragment : Fragment() {
         private val sharedViewModel: SharedViewModel by activityViewModels()
-        private var _binding: FragmentCameracaptureBinding? = null
+        private var _binding: FragmentCameracapturexBinding? = null
         private val binding get() = _binding!!
         private lateinit var preview: PreviewView
         private lateinit var cameraExecutor: ExecutorService
@@ -39,7 +41,7 @@ class CameracaptureFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-            _binding = FragmentCameracaptureBinding.inflate(inflater, container, false)
+            _binding = FragmentCameracapturexBinding.inflate(inflater, container, false)
             cameraController = LifecycleCameraController(binding.root.context)
             cameraExecutor = Executors.newSingleThreadExecutor()
             return binding.root

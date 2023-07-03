@@ -20,10 +20,5 @@
         android:fillColor="#00000000"
         android:strokeColor="#000"
         android:strokeLineCap="butt"/>
-    <path
-        android:pathData="M9.052,10.765a1.582,1.14 90,1 0,2.28 0a1.582,1.14 90,1 0,-2.28 0z"
-        android:strokeWidth="1.11"
-        android:fillColor="#fff"
-        android:strokeLineCap="square"/>
   </group>
 </vector>

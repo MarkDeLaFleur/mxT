@@ -60,14 +60,15 @@ object CameraUtil {
         }
         return mat
     }
-    fun JPGtoRGB888(img: Bitmap): Bitmap? {
-        val result: Bitmap?
+    fun jpgToRGB888(img: Bitmap): Bitmap {
         val numPixels = img.width * img.height
         val pixels = IntArray(numPixels)
         // get jpeg pixels, each int is the color value of one pixel
         img.getPixels(pixels, 0, img.width, 0, 0, img.width, img.height)
         // create bitmap in appropriate format either ARGB_8888 or RGB_565
-        result = Bitmap.createBitmap(img.width, img.height,  Bitmap.Config.ARGB_8888)
+        // val result = Bitmap.createBitmap(img.width, img.height,  Bitmap.Config.ARGB_8888)
+        val result = Bitmap.createBitmap(img.width, img.height,  Bitmap.Config.RGB_565)
+
         // Set RGB pixels
         result.setPixels(pixels, 0, result.width, 0, 0, result.width, result.height)
         return result
@@ -109,14 +110,14 @@ object CameraUtil {
     fun blobs(image: Mat):MySubmatDomino {
         val arrayOfKeyPts = keypointDetector(image)
         val listOfKeyPts  = arrayOfKeyPts.toList()
-     //   listOfKeyPts.sortByDescending { it.pt.y }
-     //   listOfKeyPts.sortByDescending { it.pt.x }
+        //   listOfKeyPts.sortByDescending { it.pt.y }
+        //   listOfKeyPts.sortByDescending { it.pt.x }
         listOfKeyPts.sortBy { it.pt.y }
 
         listOfKeyPts.forEach {
             val radius = it.size.toInt()/2
             Imgproc.circle(image,it.pt,radius, colorYellow,-1)
-        // this gives a nice filled in dot instead a faint circle around the keypoint
+            // this gives a nice filled in dot instead a faint circle around the keypoint
         }
         /* other way to draw the keypoints with a circle around the captured keypoint.
         Features2d.drawKeypoints(
@@ -132,12 +133,12 @@ object CameraUtil {
         val arrayOfRects = findRectangles(image)
         val ptsByRec: ArrayList<Point> = ArrayList()
         arrayOfRects.forEach {
-          ptsByRec.add(Point(0.0,0.0))  //x is a side y is b side
-          listOfKeyPts.forEach { kPt ->
-              val pts = findKptsInRect(kPt,it)
-              ptsByRec[ptsByRec.size-1].x += pts.x
-              ptsByRec[ptsByRec.size-1].y += pts.y
-          }
+            ptsByRec.add(Point(0.0,0.0))  //x is a side y is b side
+            listOfKeyPts.forEach { kPt ->
+                val pts = findKptsInRect(kPt,it)
+                ptsByRec[ptsByRec.size-1].x += pts.x
+                ptsByRec[ptsByRec.size-1].y += pts.y
+            }
 
         }
         // got all the points now stored in ptsByRec
@@ -164,25 +165,25 @@ object CameraUtil {
 
 
     }
-   fun findKptsInRect(kPt: KeyPoint,rctPt: Rect) :Point{
-       //kPt is the keypoint we're looking for in the rectangle
-       // note: check out the method keypoint.pt.inside . I couldn't find an doco on it but
-       //       it simplifies finding a point in a rectangle.
-       val rctPtA: Rect
-       val rctPtB: Rect
-       var outVal  = Point(0.0,0.0)
-       if(rctPt.width > rctPt.height) {
-          rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
-           Log.i("showRctB","rctPtB is ${rctPtB} vs rctPt ${rctPt}")
-           rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
-       }else
-       {
-         rctPtB = Rect(rctPt.x,rctPt.y+rctPt.height/2,rctPt.width,rctPt.height/2)
-         rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width , rctPt.height/2)
-       }
-       if(kPt.pt.inside(rctPtB))  outVal = Point(0.0,1.0)
-       if (kPt.pt.inside(rctPtA)) outVal = Point(1.0,0.0)
-       return outVal
+    fun findKptsInRect(kPt: KeyPoint,rctPt: Rect) :Point{
+        //kPt is the keypoint we're looking for in the rectangle
+        // note: check out the method keypoint.pt.inside . I couldn't find an doco on it but
+        //       it simplifies finding a point in a rectangle.
+        val rctPtA: Rect
+        val rctPtB: Rect
+        var outVal  = Point(0.0,0.0)
+        if(rctPt.width > rctPt.height) {
+            rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
+            Log.i("showRctB","rctPtB is ${rctPtB} vs rctPt ${rctPt}")
+            rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
+        }else
+        {
+            rctPtB = Rect(rctPt.x,rctPt.y+rctPt.height/2,rctPt.width,rctPt.height/2)
+            rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width , rctPt.height/2)
+        }
+        if(kPt.pt.inside(rctPtB))  outVal = Point(0.0,1.0)
+        if (kPt.pt.inside(rctPtA)) outVal = Point(1.0,0.0)
+        return outVal
     }
     fun findRectangles(imgin: Mat) :List<Rect> {
         val wrkGrey = Mat()
@@ -202,7 +203,7 @@ object CameraUtil {
         contours.forEach {
             it.convertTo(contour2f, CvType.CV_32FC2)
             peri = Imgproc.arcLength(contour2f, true)
-            Imgproc.approxPolyDP(contour2f, poly, 0.1 * peri, true)
+            Imgproc.approxPolyDP(contour2f, poly, 0.10 * peri, true)
             wrkRects.add(Imgproc.boundingRect(poly))
         }
         return wrkRects.sortedBy { it.tl().x }
@@ -211,4 +212,5 @@ object CameraUtil {
         if (!isAdded) return
         activity?.runOnUiThread(action)
     }
+
 }

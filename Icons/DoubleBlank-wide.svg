@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   fill="none"
+   stroke-linecap="square"
+   stroke-miterlimit="10"
+   version="1.1"
+   viewBox="0 0 40.005 20.053"
+   id="svg318"
+   sodipodi:docname="DoubleBlank-wide.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs322" />
+  <sodipodi:namedview
+     id="namedview320"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="25.321835"
+     inkscape:cx="18.738769"
+     inkscape:cy="10.011123"
+     inkscape:window-width="1440"
+     inkscape:window-height="740"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg318" />
+  <clipPath
+     id="a">
+    <path
+       d="m0 0h100v181.8h-100z"
+       id="path307" />
+  </clipPath>
+  <g
+     transform="matrix(0 -.25504 .23368 0 -1.2185 22.778)"
+     clip-path="url(#a)"
+     style="stroke-width:2.1319"
+     id="g316">
+    <path
+       d="m21.992 90.003h56.016"
+       stroke="#000"
+       stroke-linecap="butt"
+       stroke-linejoin="round"
+       stroke-width="4.2638"
+       id="path312" />
+    <path
+       d="m12.819 19.74c0-6.845 5.549-12.394 12.394-12.394h49.574a12.394 12.394 0 0 1 12.394 12.394v142.14c0 6.845-5.549 12.394-12.394 12.394h-49.574c-6.845 0-12.394-5.55-12.394-12.394z"
+       stroke="#000"
+       stroke-linecap="butt"
+       stroke-linejoin="round"
+       stroke-width="4.2638"
+       id="path310" />
+  </g>
+</svg>

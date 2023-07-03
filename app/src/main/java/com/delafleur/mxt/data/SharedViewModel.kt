@@ -9,9 +9,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.delafleur.mxt.util.CameraUtil
-import com.delafleur.mxt.util.CameraUtil.JPGtoRGB888
 import com.delafleur.mxt.util.CameraUtil.blobs
 import com.delafleur.mxt.util.CameraUtil.fixMatRotation
+import com.delafleur.mxt.util.CameraUtil.imageProxyToBitmap
+import com.delafleur.mxt.util.CameraUtil.jpgToRGB888
 
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
@@ -136,7 +137,7 @@ class SharedViewModel : ViewModel() {
     fun clearProcess(){
        _playerIndex.value = ""
         _totalPoints.value = ""
-        _currentRound.value = null
+        _currentRound.value = 0
         _scoreFieldLiveData.value = mutableListOf("0","0","0","0","0","0","0","0")
     }
     fun buildPlayersFromCSVrecords(inPut: MutableList<Array<String>>) {
@@ -171,7 +172,7 @@ class SharedViewModel : ViewModel() {
         else{
 
             _roundScored.value = "Round " + dominoButton.toString() + " UPDATED -->"
-            _currentRound.value = null
+            _currentRound.value = 0
             scoresToAdd.forEachIndexed { i, j ->
                if (j.length > 0 && playerT[i].playerName.length > 1) {
                     playerT[i].score[dominoButton] = j}
@@ -208,11 +209,17 @@ class SharedViewModel : ViewModel() {
         return outRec
     }
     fun imageRect (image : ImageProxy,prev: PreviewView) {
-        val cvBitmap = JPGtoRGB888(CameraUtil.imageProxyToBitmap(image))
+        val cvBitmap = jpgToRGB888(imageProxyToBitmap(image))
+        var resizeBitmap = Bitmap.createScaledBitmap(cvBitmap,
+            640,480,true)
         var matCVT = Mat()
-        Utils.bitmapToMat(cvBitmap, matCVT)
+        Utils.bitmapToMat(resizeBitmap, matCVT)
         matCVT = fixMatRotation(matCVT, prev)
-        Imgproc.resize(matCVT,matCVT,Size(700.0,900.0))
+        Log.i("matCVT", "img.width ${matCVT.size().width } height ${matCVT.size().height} ")
+        // wrkMySubmatDomino stores all the images in a list, matCVT is used to find all the pips
+        // then blobs gets the dominos and looks to see if the pips are in the dominos
+        // I'm going to change this and get rid of simple blob and use the minenclosing circles
+        // to find the pips in the rectangles.
         val wrkMySubmatDomino = blobs(matCVT)
         _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
         var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "

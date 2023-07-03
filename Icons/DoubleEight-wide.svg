@@ -1,0 +1,25 @@
+<svg fill="none" stroke-linecap="square" stroke-miterlimit="10" version="1.1" viewBox="0 0 40.005 20.053" xmlns="http://www.w3.org/2000/svg">
+ <clipPath id="a">
+  <path d="m0 0h100v181.8h-100z"/>
+ </clipPath>
+ <g transform="matrix(0 -.25504 .23368 0 -1.2185 22.778)" clip-path="url(#a)" style="stroke-width:2.1319">
+  <path d="m12.819 19.74c0-6.845 5.549-12.394 12.394-12.394h49.574a12.394 12.394 0 0 1 12.394 12.394v142.14c0 6.845-5.549 12.394-12.394 12.394h-49.574c-6.845 0-12.394-5.55-12.394-12.394z" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="4.2638"/>
+  <path d="m21.992 90.003h56.016" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-width="4.2638"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-110.94" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-26.746" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-154.72" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-69.065" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-110.94" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-27.188" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-154.72" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-69.065" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-132.83" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-71.397" cy="-47.176" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-50.912" cy="-154.72" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-50.912" cy="-110.94" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-50.912" cy="-69.065" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-50.912" cy="-27.188" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-47.905" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+  <ellipse transform="scale(-1)" cx="-30.428" cy="-132.1" rx="4.6182" ry="5.5861" style="fill:#0ff;stroke-width:4.5451"/>
+ </g>
+</svg>
