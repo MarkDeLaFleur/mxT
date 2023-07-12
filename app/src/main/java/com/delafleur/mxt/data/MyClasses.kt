@@ -3,7 +3,9 @@ package com.delafleur.mxt.data
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
+import org.opencv.core.KeyPoint
 import org.opencv.core.Point
+import org.opencv.core.Rect
 import kotlin.random.Random
 
 
@@ -50,5 +52,8 @@ data class MySubmatDomino(
     var pts: List<Point>,
     val bitmapImgs: ArrayList<Bitmap>
 )
-
+data class RectswithPoints(
+    var dominoRect: Rect,
+    var dominoPoint: List<KeyPoint>
+)
 

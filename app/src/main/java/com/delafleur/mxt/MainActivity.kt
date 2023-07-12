@@ -37,7 +37,7 @@ import org.opencv.android.OpenCVLoader
                          as NavHostFragment).navController
          return navController.navigateUp() || super.onSupportNavigateUp()
      }
-     fun checkPermissions(context: Context): Boolean {
+     private fun checkPermissions(context: Context): Boolean {
          for (permission in REQUIRED_PERMISSIONS) {
              if (context.let {
                      ContextCompat.checkSelfPermission(
@@ -52,13 +52,10 @@ import org.opencv.android.OpenCVLoader
          return true
      }
 
-     fun userRequestPermissions(activity: Activity) {
+     private fun userRequestPermissions(activity: Activity) {
          ActivityCompat.requestPermissions(
              activity,REQUIRED_PERMISSIONS,2000)
          }
 
-     //    companion object {
- //     init { System.loadLibrary("opencv_java4") }
- //   }
 
 }

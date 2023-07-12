@@ -15,6 +15,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.camera.camera2.internal.compat.workaround.TargetAspectRatio
 import androidx.camera.core.ImageCapture.*
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
+import androidx.camera.core.impl.utils.ContextUtil.getBaseContext
 import com.delafleur.mxt.MainActivity
 import com.delafleur.mxt.R
 import com.delafleur.mxt.data.SharedViewModel
@@ -52,18 +54,12 @@ class CameracaptureFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             preview = view.findViewById(R.id.viewPreview)
-            cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
-            cameraController.imageCaptureMode = ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY
-            cameraController.imageCaptureTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
-            cameraController.previewTargetSize = CameraController.OutputSize(TargetAspectRatio.RATIO_4_3)
+            cameraController  = LifecycleCameraController(this.requireContext())
+            cameraController.setEnabledUseCases(LifecycleCameraController.IMAGE_CAPTURE)
+            cameraController.imageCaptureMode = CAPTURE_MODE_MINIMIZE_LATENCY
             cameraController.imageCaptureFlashMode= FLASH_MODE_OFF
             cameraController.bindToLifecycle(viewLifecycleOwner)
             preview.controller = cameraController
-            Log.i("log","preview w/h ${preview.width}/${preview.height}")
-            Log.i("log", "rotation is ${preview.rotation}")
-            Log.i("log","implementation is ${preview.implementationMode}")
-            Log.i("log","Image capture target size ${cameraController.imageCaptureTargetSize} ")
-            Log.i("log","preview target size ${cameraController.previewTargetSize}")
             binding?.apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = sharedViewModel
@@ -72,22 +68,42 @@ class CameracaptureFragment : Fragment() {
 
 
         }
-        private fun Fragment.runOnUiThread(action: () -> Unit) {
+
+
+
+    private fun Fragment.runOnUiThread(action: () -> Unit) {
             if (!isAdded) return
            activity?.runOnUiThread(action)
         }
         fun takePhoto() {
+
             cameraController.imageCaptureFlashMode=FLASH_MODE_AUTO
+            Log.i("log","preview w/h ${preview.width}/${preview.height}")
+            Log.i("log", "rotation is ${preview.rotation}")
+            Log.i("log","implementation is ${preview.implementationMode}")
+            Log.i("log","Image capture target size ${cameraController.imageCaptureTargetSize} ")
+            Log.i("log","preview target size ${cameraController.previewTargetSize}")
+
             cameraController.takePicture(
                 ContextCompat.getMainExecutor(binding.root.context),
                 object: ImageCapture.OnImageCapturedCallback() {
                     override fun onError(exc: ImageCaptureException){
                         Log.e("Error","in Memory Photo capture failed: ${exc.message}",exc)
                     }
-                    override fun onCaptureSuccess(image: ImageProxy) : Unit {
-                        super.onCaptureSuccess(image)
-                        sharedViewModel.imageRect(image,preview)
-                        image.close()
+                    @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
+
+                    override fun onCaptureSuccess(imageP: ImageProxy) : Unit {
+                        super.onCaptureSuccess(imageP)
+                        Log.i("imageCapture","the captured image rotation ${imageP.imageInfo.rotationDegrees}")
+                        Log.i("imageCapture","the captured image crop rect" +
+                            "left  ${imageP.cropRect.left}" +
+                            "right ${imageP.cropRect.right}" +
+                            "width ${imageP.cropRect.width()} " +
+                            "height ${imageP.cropRect.height()} +" +
+                            "jpeg byte buffer ${imageP.planes[0].buffer.remaining()}")
+
+                        sharedViewModel.imageRect(imageP.image!!.planes[0].buffer)
+                        //image.close()
                         cameraController.unbind()
                        view?.findNavController()?.navigate(R.id.action_cameracaptureFragment_to_cameraShowImageFragment)
 

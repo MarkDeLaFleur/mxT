@@ -13,7 +13,7 @@ import com.delafleur.mxt.util.CameraUtil.blobParamsInit
 import com.delafleur.mxt.data.MySubmatDomino
 import org.opencv.android.Utils
 import org.opencv.core.*
-import org.opencv.features2d.Features2d
+
 import org.opencv.features2d.SimpleBlobDetector
 import org.opencv.features2d.SimpleBlobDetector_Params
 import org.opencv.imgproc.Imgproc
@@ -39,26 +39,32 @@ object CameraUtil {
         }
     }
     fun fixMatRotation(matOrg: Mat, previewView: PreviewView?): Mat {
-        val mat : Mat
+        Log.i("rotation","Calling Rotation ==================== ${previewView?.display?.rotation}")
 
         when (previewView?.display?.rotation) {
             Surface.ROTATION_0 -> {
-                mat = Mat(matOrg.cols(), matOrg.rows(), matOrg.type())
-                Core.transpose(matOrg, mat)
-                Core.flip(mat, mat, 1)
+                Log.i("rotation","Rotation is 0")
+                Core.transpose(matOrg, matOrg)
+                Core.flip(matOrg, matOrg, 1)
+                return matOrg
             }
-            Surface.ROTATION_90 -> mat = matOrg
+            Surface.ROTATION_90 -> {
+                Log.i("rotation","Rotation is 90")
+
+                return matOrg
+            }
             Surface.ROTATION_270 -> {
-                mat = matOrg
-                Core.flip(mat, mat, -1)
+                Log.i("rotation","Rotation is 270")
+                Core.transpose(matOrg, matOrg)
+
+                Core.flip(matOrg, matOrg, 1)
+                return matOrg
             }
             else -> {
-                mat = Mat(matOrg.cols(), matOrg.rows(), matOrg.type())
-                Core.transpose(matOrg, mat)
-                Core.flip(mat, mat, 1)
+                Log.i("rotation","Rotation is Other")
+                return matOrg
             }
         }
-        return mat
     }
     fun jpgToRGB888(img: Bitmap): Bitmap {
         val numPixels = img.width * img.height
@@ -74,6 +80,9 @@ object CameraUtil {
         return result
     }
 
+    // eliminated this function by passing the buffer from the image capture directly
+    // like so image.image!!.planes[0].buffer
+    // opencv imdecode is the intent and it takes the buffer as an array
     fun imageProxyToBitmap(image: ImageProxy): Bitmap {
         val planeProxy = image.planes[0]
         val buffer: ByteBuffer = planeProxy.buffer
@@ -102,7 +111,7 @@ object CameraUtil {
         blobParms._thresholdStep = 10.0F
         return blobParms
     }
-    fun keypointDetector(mat: Mat): MatOfKeyPoint {
+    private fun keypointDetector(mat: Mat): MatOfKeyPoint {
         val keypts = MatOfKeyPoint()
         detector.detect(mat,keypts)
         return keypts
@@ -131,6 +140,12 @@ object CameraUtil {
         )
         */
         val arrayOfRects = findRectangles(image)
+        Log.i("dude","array of rectangles biggest rectangle  " +
+                "area is ${arrayOfRects.maxBy { it.area() }} for count ${arrayOfRects.size}")
+        val bigRect = arrayOfRects.maxBy { it.area() }
+        Imgproc.rectangle(image, bigRect.br(),
+            bigRect.tl(), colorGreen, 3, Imgproc.LINE_8)
+
         val ptsByRec: ArrayList<Point> = ArrayList()
         arrayOfRects.forEach {
             ptsByRec.add(Point(0.0,0.0))  //x is a side y is b side
@@ -165,16 +180,16 @@ object CameraUtil {
 
 
     }
-    fun findKptsInRect(kPt: KeyPoint,rctPt: Rect) :Point{
+    private fun findKptsInRect(kPt: KeyPoint,rctPt: Rect) :Point{
         //kPt is the keypoint we're looking for in the rectangle
         // note: check out the method keypoint.pt.inside . I couldn't find an doco on it but
         //       it simplifies finding a point in a rectangle.
         val rctPtA: Rect
         val rctPtB: Rect
-        var outVal  = Point(0.0,0.0)
+        var outVal  = Point(0.0,0.0)  //keeps track of a side and b side of domino
         if(rctPt.width > rctPt.height) {
             rctPtB = Rect(rctPt.x+rctPt.width/2,rctPt.y,rctPt.width/2,rctPt.height)
-            Log.i("showRctB","rctPtB is ${rctPtB} vs rctPt ${rctPt}")
+
             rctPtA = Rect(rctPt.x, rctPt.y, rctPt.width / 2, rctPt.height)
         }else
         {
@@ -185,7 +200,7 @@ object CameraUtil {
         if (kPt.pt.inside(rctPtA)) outVal = Point(1.0,0.0)
         return outVal
     }
-    fun findRectangles(imgin: Mat) :List<Rect> {
+    private fun findRectangles(imgin: Mat) :List<Rect> {
         val wrkGrey = Mat()
         val contours: List<MatOfPoint> = ArrayList()
         val wrkRects: ArrayList<Rect> = ArrayList()
@@ -206,8 +221,12 @@ object CameraUtil {
             Imgproc.approxPolyDP(contour2f, poly, 0.10 * peri, true)
             wrkRects.add(Imgproc.boundingRect(poly))
         }
+        //what's the max size of a rect
         return wrkRects.sortedBy { it.tl().x }
     }
+
+
+
     fun Fragment.runOnUiThread(action: () -> Unit) {
         if (!isAdded) return
         activity?.runOnUiThread(action)

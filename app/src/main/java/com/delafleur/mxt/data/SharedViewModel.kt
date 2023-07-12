@@ -14,11 +14,19 @@ import com.delafleur.mxt.util.CameraUtil.fixMatRotation
 import com.delafleur.mxt.util.CameraUtil.imageProxyToBitmap
 import com.delafleur.mxt.util.CameraUtil.jpgToRGB888
 
+
 import com.delafleur.mxt.util.writeCSV
 import org.opencv.android.Utils
+import org.opencv.core.CvType
+import org.opencv.core.CvType.CV_8UC1
+import org.opencv.core.CvType.CV_8UC4
 import org.opencv.core.Mat
 import org.opencv.core.Size
+import org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR
+import org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED
+import org.opencv.imgcodecs.Imgcodecs.imdecode
 import org.opencv.imgproc.Imgproc
+import java.nio.ByteBuffer
 
 
 class SharedViewModel : ViewModel() {
@@ -208,20 +216,11 @@ class SharedViewModel : ViewModel() {
         Log.i("outRec","outRec size is ${outRec.size}")
         return outRec
     }
-    fun imageRect (image : ImageProxy,prev: PreviewView) {
-        val cvBitmap = jpgToRGB888(imageProxyToBitmap(image))
-        var resizeBitmap = Bitmap.createScaledBitmap(cvBitmap,
-            640,480,true)
-        var matCVT = Mat()
-        Utils.bitmapToMat(resizeBitmap, matCVT)
-        matCVT = fixMatRotation(matCVT, prev)
-        Log.i("matCVT", "img.width ${matCVT.size().width } height ${matCVT.size().height} ")
-        // wrkMySubmatDomino stores all the images in a list, matCVT is used to find all the pips
-        // then blobs gets the dominos and looks to see if the pips are in the dominos
-        // I'm going to change this and get rid of simple blob and use the minenclosing circles
-        // to find the pips in the rectangles.
+    fun  imageRect (im: ByteBuffer) {
+        val matCVT = imdecode(Mat(1,im.remaining(),CV_8UC1,im), IMREAD_COLOR)
+        Log.i("imageInfo","mat from imageproxy? ${matCVT.size().width} ${matCVT.size().height}")
         val wrkMySubmatDomino = blobs(matCVT)
-        _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]
+        _bitmapx.value = wrkMySubmatDomino.bitmapImgs[0]  //thought about taking each domino as an image
         var showPoints = playerT[playerIndex.value!!.toInt()].playerName + " "
         var totPts = 0
         if (wrkMySubmatDomino.pts.isNotEmpty()) {
